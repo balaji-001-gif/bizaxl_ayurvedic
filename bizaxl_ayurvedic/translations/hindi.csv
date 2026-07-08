@@ -1,0 +1,35 @@
+source_text,translated_text,language
+Dosage,मात्रा,hi
+Frequency,आवृत्ति,hi
+Duration,अवधि,hi
+Instructions,निर्देश,hi
+Medication,औषधि,hi
+Patient,रोगी,hi
+Practitioner,चिकित्सक,hi
+Prescription,पर्चा,hi
+Morning,सुबह,hi
+Afternoon,दोपहर,hi
+Evening,शाम,hi
+Night,रात,hi
+Before Meal,भोजन से पहले,hi
+After Meal,भोजन के बाद,hi
+With Water,पानी के साथ,hi
+With Milk,दूध के साथ,hi
+Once Daily,दिन में एक बार,hi
+Twice Daily,दिन में दो बार,hi
+Thrice Daily,दिन में तीन बार,hi
+OD,दिन में एक बार,hi
+BD,दिन में दो बार,hi
+TID,दिन में तीन बार,hi
+QID,दिन में चार बार,hi
+Notes,टिप्पणी,hi
+Date,दिनांक,hi
+Priority,प्राथमिकता,hi
+Status,स्थिति,hi
+Routine,नियमित,hi
+Urgent,तत्काल,hi
+Emergency,आपातकालीन,hi
+Draft,मसौदा,hi
+Approved,स्वीकृत,hi
+Dispensed,वितरित,hi
+Completed,पूर्ण,hi

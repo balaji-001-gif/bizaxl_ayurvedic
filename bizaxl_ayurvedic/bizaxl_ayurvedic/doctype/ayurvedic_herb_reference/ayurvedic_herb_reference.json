@@ -1,0 +1,133 @@
+{
+ "doctype": "DocType",
+ "name": "Ayurvedic Herb Reference",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Clinical Decision Support — classical Ayurvedic herbs with symptom mappings and formulation suggestions, surfaced inside the prescription builder.",
+ "icon": "octicon octicon-pulse",
+ "fields": [
+  {
+   "fieldname": "herb_name",
+   "label": "Herb Name (English)",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "sanskrit_name",
+   "label": "Sanskrit Name",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "latin_name",
+   "label": "Latin / Botanical Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "column_break_hr1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dosha_effect",
+   "label": "Dosha Effect",
+   "fieldtype": "Select",
+   "options": "\nVata-Pacifying\nPitta-Pacifying\nKapha-Pacifying\nVata-Pitta-Pacifying\nVata-Kapha-Pacifying\nPitta-Kapha-Pacifying\nTridoshic",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "properties",
+   "label": "Properties (Rasa / Guna / Virya / Vipaka)",
+   "fieldtype": "Small Text",
+   "description": "Classical Ayurvedic properties: Taste, Quality, Potency, Post-digestive effect"
+  },
+  {
+   "fieldname": "classical_formulations",
+   "label": "Classical Formulations",
+   "fieldtype": "Small Text",
+   "description": "Well-known classical formulations containing this herb (e.g. Triphala, Chyawanprash)"
+  },
+  {
+   "fieldname": "sb_symptoms",
+   "fieldtype": "Section Break",
+   "label": "Symptom Mapping"
+  },
+  {
+   "fieldname": "symptom_map",
+   "label": "Indicated for Symptoms",
+   "fieldtype": "Table",
+   "options": "Herb Symptom Map"
+  },
+  {
+   "fieldname": "sb_usage",
+   "fieldtype": "Section Break",
+   "label": "Usage & Instructions"
+  },
+  {
+   "fieldname": "typical_dosage",
+   "label": "Typical Dosage",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "contraindications",
+   "label": "Contraindications",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "references",
+   "label": "References",
+   "fieldtype": "Small Text",
+   "description": "Classical texts: Charaka Samhita, Sushruta Samhita, Ashtanga Hridayam, etc."
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Ayurvedic Store Manager",
+   "read": 1
+  },
+  {
+   "role": "Ayurvedic Counsellor",
+   "read": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "herb_name",
+ "naming_rule": "By fieldname",
+ "autoname": "field:herb_name"
+}

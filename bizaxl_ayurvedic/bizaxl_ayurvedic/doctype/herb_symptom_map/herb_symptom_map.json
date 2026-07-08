@@ -1,0 +1,50 @@
+{
+ "doctype": "DocType",
+ "name": "Herb Symptom Map",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 0,
+ "allow_rename": 0,
+ "allow_import": 0,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Maps Ayurvedic herbs to symptoms they are classically indicated for — used by the Clinical Decision Support suggestion engine.",
+ "icon": "fa fa-link",
+ "fields": [
+  {
+   "fieldname": "symptom",
+   "label": "Symptom / Condition",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "symptom_type",
+   "label": "Symptom Type",
+   "fieldtype": "Select",
+   "options": "\nDigestive\nRespiratory\nSkin\nJoint / Muscular\nNervous System\nMetabolic\nWomen's Health\nGeneral Wellness\nMental Health",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "formulation",
+   "label": "Recommended Formulation",
+   "fieldtype": "Data",
+   "description": "Classical formulation or preparation method for this herb for this symptom"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

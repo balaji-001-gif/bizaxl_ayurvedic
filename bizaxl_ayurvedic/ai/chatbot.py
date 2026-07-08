@@ -91,6 +91,9 @@ def _dispatch(intent, from_number, message):
                 "https://<storename>.bizaxl.com/book")
 
     if intent == "feedback":
-        return "Thank you! Please rate your last visit 1-5 and add any comments — we read every message."
+        # Delegate to the feedback collector which handles rating extraction
+        # and creates Patient Feedback records
+        from bizaxl_ayurvedic.ai.feedback_collector import handle_feedback_response
+        return handle_feedback_response(from_number, message)
 
     return call_llm(message)

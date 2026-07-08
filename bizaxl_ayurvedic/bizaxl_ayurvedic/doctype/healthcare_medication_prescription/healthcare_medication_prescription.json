@@ -75,6 +75,14 @@
    "reqd": 1
   },
   {
+   "fieldname": "prescription_language",
+   "label": "Prescription Language",
+   "fieldtype": "Select",
+   "options": "\nEnglish\nहिन्दी\nसंस्कृत",
+   "default": "English",
+   "description": "Output language for this prescription — dosage instructions and labels will be translated at print / WhatsApp share."
+  },
+  {
    "fieldname": "detail_section",
    "fieldtype": "Section Break",
    "label": "Details"

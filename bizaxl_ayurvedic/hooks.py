@@ -39,6 +39,9 @@ doc_events = {
     "Patient Encounter": {
         "after_insert": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.treatment_follow_up.treatment_follow_up.create_or_extend_from_encounter",
     },
+    "Sales Invoice": {
+        "on_submit": "bizaxl_ayurvedic.ai.feedback_collector.request_feedback_after_billing",
+    },
 }
 
 # ------------------------------------------------------------------
@@ -48,6 +51,7 @@ scheduler_events = {
     "daily": [
         "bizaxl_ayurvedic.ai.lead_scoring.recompute_all_lead_scores",
         "bizaxl_ayurvedic.ai.follow_up_reminders.send_due_follow_up_reminders",
+        "bizaxl_ayurvedic.ai.feedback_collector.send_pending_feedback_requests",
     ],
     "weekly": [
         "bizaxl_ayurvedic.ai.seasonal_forecast.generate_reorder_forecast",
@@ -62,6 +66,7 @@ fixtures = [
     {"dt": "Workspace", "filters": [["name", "=", "Ayurvedic Store"]]},
     {"dt": "Notification", "filters": [["module", "=", "Bizaxl Ayurvedic"]]},
     {"dt": "Role", "filters": [["name", "in", ["Ayurvedic Store Manager", "Ayurvedic Counsellor"]]]},
+    {"dt": "Translation", "filters": [["module", "=", "Bizaxl Ayurvedic"]]},
 ]
 
 # ------------------------------------------------------------------

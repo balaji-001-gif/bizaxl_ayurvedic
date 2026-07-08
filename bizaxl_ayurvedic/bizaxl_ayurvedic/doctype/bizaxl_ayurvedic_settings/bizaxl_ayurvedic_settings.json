@@ -70,6 +70,23 @@
    "fieldtype": "Password"
   },
   {
+   "fieldname": "sb_store",
+   "fieldtype": "Section Break",
+   "label": "Store Details"
+  },
+  {
+   "fieldname": "store_name",
+   "label": "Store / Clinic Name",
+   "fieldtype": "Data",
+   "description": "Used in automated WhatsApp messages to customers"
+  },
+  {
+   "fieldname": "google_review_url",
+   "label": "Google Review URL",
+   "fieldtype": "Data",
+   "description": "Your Google Business Profile review link — shared with satisfied customers after feedback"
+  },
+  {
    "fieldname": "sb_loyalty",
    "fieldtype": "Section Break",
    "label": "Brand Loyalty Tie-Up"

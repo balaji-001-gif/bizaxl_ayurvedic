@@ -1,0 +1,35 @@
+source_text,translated_text,language
+Dosage,मात्रा,sa
+Frequency,आवृत्तिः,sa
+Duration,अवधिः,sa
+Instructions,निर्देशाः,sa
+Medication,औषधम्,sa
+Patient,रोगी,sa
+Practitioner,वैद्यः,sa
+Prescription,प्रलेखः,sa
+Morning,प्रातः,sa
+Afternoon,मध्याह्ने,sa
+Evening,सायम्,sa
+Night,रात्रौ,sa
+Before Meal,भोजनात् पूर्वम्,sa
+After Meal,भोजनानन्तरम्,sa
+With Water,जलेन सह,sa
+With Milk,दुग्धेन सह,sa
+Once Daily,दिने सकृत्,sa
+Twice Daily,दिने द्विवारम्,sa
+Thrice Daily,दिने त्रिवारम्,sa
+OD,दिने सकृत्,sa
+BD,दिने द्विवारम्,sa
+TID,दिने त्रिवारम्,sa
+QID,दिने चतुर्वारम्,sa
+Notes,टिप्पणी,sa
+Date,दिनाङ्कः,sa
+Priority,प्राथमिक्यम्,sa
+Status,अवस्था,sa
+Routine,नित्यम्,sa
+Urgent,त्वरितम्,sa
+Emergency,आपत्कालीनम्,sa
+Draft,प्रारूपम्,sa
+Approved,अनुमोदितम्,sa
+Dispensed,वितीर्णम्,sa
+Completed,समाप्तम्,sa

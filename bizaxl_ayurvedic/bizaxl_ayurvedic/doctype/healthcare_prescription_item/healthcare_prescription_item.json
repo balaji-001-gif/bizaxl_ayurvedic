@@ -53,6 +53,12 @@
    "fieldname": "instructions",
    "label": "Instructions",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "instructions_regional",
+   "label": "निर्देश (Instructions in हिन्दी/संस्कृत)",
+   "fieldtype": "Small Text",
+   "description": "Dosage instructions in the patient's preferred regional language for print/share."
   }
  ],
  "permissions": [],

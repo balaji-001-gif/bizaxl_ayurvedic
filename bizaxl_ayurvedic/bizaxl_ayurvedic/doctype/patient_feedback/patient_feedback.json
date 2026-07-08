@@ -1,0 +1,135 @@
+{
+ "doctype": "DocType",
+ "name": "Patient Feedback",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Patient/customer feedback and ratings collected post-billing via WhatsApp or in-app — closes the Automated Feedback Collection gap vs Clinicea & NeftX.",
+ "icon": "fa fa-star",
+ "fields": [
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "label": "Sales Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_fb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rating",
+   "label": "Rating",
+   "fieldtype": "Rating",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "feedback_date",
+   "label": "Feedback Date",
+   "fieldtype": "Date",
+   "default": "Today",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source",
+   "label": "Source",
+   "fieldtype": "Select",
+   "options": "\nWhatsApp\nIn-App\nSMS\nIn-Store",
+   "default": "WhatsApp"
+  },
+  {
+   "fieldname": "sb_feedback_content",
+   "fieldtype": "Section Break",
+   "label": "Feedback Details"
+  },
+  {
+   "fieldname": "comments",
+   "label": "Comments",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "sentiment",
+   "label": "Sentiment",
+   "fieldtype": "Select",
+   "options": "\nPositive\nNeutral\nNegative",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "google_review_link_sent",
+   "label": "Google Review Link Sent",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "description": "If rating >= 4, a Google Review request link was auto-shared via WhatsApp."
+  },
+  {
+   "fieldname": "google_review_url",
+   "label": "Google Review URL",
+   "fieldtype": "Data",
+   "description": "Your Google Business Profile review link — set once in Bizaxl Ayurvedic Settings."
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Ayurvedic Store Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "patient",
+ "naming_rule": "Expression",
+ "autoname": "FB-.#####"
+}

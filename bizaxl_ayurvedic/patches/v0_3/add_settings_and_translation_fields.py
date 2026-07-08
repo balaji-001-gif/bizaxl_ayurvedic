@@ -169,7 +169,13 @@ def _seed_herb_reference_data():
 
 
 def _import_translations():
-    """Import Hindi and Sanskrit translations from CSV files into the Translation doctype."""
+    """Import Hindi and Sanskrit translations from CSV files into the Translation doctype.
+
+    Ensures the Language records exist before creating Translations (Sanskrit 'sa'
+    is not always seeded in Frappe by default, so we create it if missing).
+    """
+    _ensure_languages()
+
     translations_dir = frappe.get_app_path("bizaxl_ayurvedic", "translations")
     for filename in ["hindi.csv", "sanskrit.csv"]:
         filepath = os.path.join(translations_dir, filename)
@@ -202,3 +208,31 @@ def _import_translations():
                 frappe.logger("bizaxl_ayurvedic").info(
                     f"v0.3: Imported {count} new {filename} translations"
                 )
+
+
+def _ensure_languages():
+    """Ensure Sanskrit (sa) Language record exists in the system.
+
+    Hindi (hi) is typically pre-seeded in Frappe but Sanskrit (sa) is not.
+    Without this, Translation records with language='sa' fail with
+    LinkValidationError.
+    """
+    for lang_code, lang_name, lang_en_name in [
+        ("hi", "हिन्दी", "Hindi"),
+        ("sa", "संस्कृत", "Sanskrit"),
+    ]:
+        if not frappe.db.exists("Language", lang_code):
+            try:
+                frappe.get_doc({
+                    "doctype": "Language",
+                    "language_code": lang_code,
+                    "language_name": lang_name,
+                    "enabled": 1,
+                }).insert(ignore_permissions=True)
+                frappe.logger("bizaxl_ayurvedic").info(
+                    f"v0.3: Created Language record for {lang_name} ({lang_code})"
+                )
+            except Exception:
+                # If creation fails (e.g. race condition), skip gracefully
+                # — the translation import will also skip this language
+                pass

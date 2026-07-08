@@ -1,1 +1,2 @@
 bizaxl_ayurvedic.patches.v0_1.add_custom_fields
+bizaxl_ayurvedic.patches.v0_2.add_patient_dosha_fields

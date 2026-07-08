@@ -1,0 +1,115 @@
+{
+ "doctype": "Workspace",
+ "name": "Ayurvedic Store",
+ "label": "Ayurvedic Store",
+ "module": "Bizaxl Ayurvedic",
+ "public": 1,
+ "is_hidden": 0,
+ "icon": "octicon octicon-pulse",
+ "title": "Ayurvedic Store",
+ "content": "[{\"type\": \"header\", \"data\": {\"text\": \"<b>Ayurvedic Store & Clinic Suite</b>\", \"level\": 3, \"col\": 12}}, {\"type\": \"paragraph\", \"data\": {\"text\": \"Leads, treatments, prescriptions, diet plans, and AI-powered insights \\u2014 all in one workspace.\", \"col\": 12}}, {\"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"type\": \"header\", \"data\": {\"text\": \"Front Desk & Leads\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Clinical Lead\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Patient Appointment\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Token Counter\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Patient\", \"col\": 3}}, {\"type\": \"header\", \"data\": {\"text\": \"Treatment & Prescriptions\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Treatment Record\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Healthcare Medication Prescription\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Treatment Follow-Up\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lab Test Parameter Reference\", \"col\": 3}}, {\"type\": \"header\", \"data\": {\"text\": \"Diet & Nutrition\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Diet Template\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Diet Plan\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Meal Preparation Log\", \"col\": 3}}, {\"type\": \"header\", \"data\": {\"text\": \"AI & Reports\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Hot Leads (AI Score)\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Seasonal Reorder Forecast\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Bizaxl Ayurvedic Settings\", \"col\": 3}}]",
+ "shortcuts": [
+  {
+   "label": "Clinical Lead",
+   "link_to": "Clinical Lead",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Blue"
+  },
+  {
+   "label": "Patient Appointment",
+   "link_to": "Patient Appointment",
+   "type": "DocType",
+   "doc_view": "Calendar",
+   "color": "Green"
+  },
+  {
+   "label": "Token Counter",
+   "link_to": "Token Counter",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Orange"
+  },
+  {
+   "label": "Patient",
+   "link_to": "Patient",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Treatment Record",
+   "link_to": "Treatment Record",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Blue"
+  },
+  {
+   "label": "Healthcare Medication Prescription",
+   "link_to": "Healthcare Medication Prescription",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Green"
+  },
+  {
+   "label": "Treatment Follow-Up",
+   "link_to": "Treatment Follow-Up",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Orange"
+  },
+  {
+   "label": "Lab Test Parameter Reference",
+   "link_to": "Lab Test Parameter Reference",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Diet Template",
+   "link_to": "Diet Template",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Blue"
+  },
+  {
+   "label": "Diet Plan",
+   "link_to": "Diet Plan",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Green"
+  },
+  {
+   "label": "Meal Preparation Log",
+   "link_to": "Meal Preparation Log",
+   "type": "DocType",
+   "doc_view": "List",
+   "color": "Orange"
+  },
+  {
+   "label": "Hot Leads (AI Score)",
+   "link_to": "Hot Leads (AI Score)",
+   "type": "Report",
+   "doc_view": "",
+   "color": "Red"
+  },
+  {
+   "label": "Seasonal Reorder Forecast",
+   "link_to": "Seasonal Reorder Forecast",
+   "type": "Report",
+   "doc_view": "",
+   "color": "Purple"
+  },
+  {
+   "label": "Bizaxl Ayurvedic Settings",
+   "link_to": "Bizaxl Ayurvedic Settings",
+   "type": "DocType",
+   "doc_view": "",
+   "color": "Grey"
+  }
+ ],
+ "links": [],
+ "charts": [],
+ "number_cards": [],
+ "sequence_id": 1
+}

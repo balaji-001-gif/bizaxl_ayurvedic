@@ -1,0 +1,56 @@
+{
+ "doctype": "DocType",
+ "name": "Treatment Photo",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Before/after treatment photo with annotation, used inside Treatment Record.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "photo",
+   "label": "Photo",
+   "fieldtype": "Attach Image",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "photo_type",
+   "label": "Photo Type",
+   "fieldtype": "Select",
+   "options": "Before\nAfter",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "treatment_date",
+   "label": "Treatment Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "angle",
+   "label": "Angle / View",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "annotation",
+   "label": "Annotation",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

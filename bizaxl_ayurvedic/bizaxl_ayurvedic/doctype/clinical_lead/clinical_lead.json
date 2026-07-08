@@ -1,0 +1,224 @@
+{
+ "doctype": "DocType",
+ "name": "Clinical Lead",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Captures Ayurvedic store / clinic leads with Dosha profiling, AI-scored follow-up priority, and one-click conversion to Patient.",
+ "icon": "fa fa-user-plus",
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Naming Series",
+   "fieldtype": "Select",
+   "options": "CLI.-.LEAD.-.#####",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "section_break_basic",
+   "fieldtype": "Section Break",
+   "label": "Basic Info"
+  },
+  {
+   "fieldname": "lead_name",
+   "label": "Lead Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mobile_number",
+   "label": "Mobile Number",
+   "fieldtype": "Phone",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "email",
+   "label": "Email",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gender",
+   "label": "Gender",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "age",
+   "label": "Age",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "section_break_source",
+   "fieldtype": "Section Break",
+   "label": "Lead Source Information"
+  },
+  {
+   "fieldname": "lead_source",
+   "label": "Lead Source",
+   "fieldtype": "Select",
+   "options": "\nWebsite\nWhatsApp\nInstagram\nFacebook\nGoogle\nWalk-in\nReferral\nCall",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "referred_by",
+   "label": "Referred By",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "column_break_source",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "campaign",
+   "label": "Campaign",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "section_break_interest",
+   "fieldtype": "Section Break",
+   "label": "Treatment Interest"
+  },
+  {
+   "fieldname": "interested_treatment_options",
+   "label": "Interested Treatment Options",
+   "fieldtype": "Select",
+   "options": "\nSkin Whitening\nLaser Therapy\nHydrafacial\nPRP Hair\nAcne Treatment\nPigmentation Treatment\nAnti Aging\nHair Treatment\nChemical Peel",
+   "reqd": 1
+  },
+  {
+   "fieldname": "skin_concern",
+   "label": "Skin / Health Concern",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "column_break_interest",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expected_budget",
+   "label": "Expected Budget",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "section_break_followup",
+   "fieldtype": "Section Break",
+   "label": "Follow Up"
+  },
+  {
+   "fieldname": "follow_up_date",
+   "label": "Follow Up Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "counsellor",
+   "label": "Practitioner / Counsellor",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_followup",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lead_status",
+   "label": "Lead Status",
+   "fieldtype": "Select",
+   "options": "New\nContacted\nInterested\nAppointment Scheduled\nVisited\nConverted\nLost",
+   "in_list_view": 1,
+   "default": "New",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "remarks",
+   "label": "Remarks",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "section_break_conversion",
+   "fieldtype": "Section Break",
+   "label": "Conversion"
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "column_break_conversion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "workflow_state",
+   "label": "Workflow State",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "label": "Amended From",
+   "fieldtype": "Link",
+   "options": "Clinical Lead",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "lead_name",
+ "naming_rule": "Expression",
+ "autoname": "CLI.-.LEAD.-.#####"
+}

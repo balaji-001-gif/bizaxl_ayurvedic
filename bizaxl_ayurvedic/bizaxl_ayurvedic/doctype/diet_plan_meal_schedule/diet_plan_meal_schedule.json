@@ -1,0 +1,84 @@
+{
+ "doctype": "DocType",
+ "name": "Diet Plan Meal Schedule",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Per-meal schedule row generated inside a patient's Diet Plan.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "meal_type",
+   "label": "Meal Time",
+   "fieldtype": "Select",
+   "options": "Morning\nAfternoon\nEvening\nNight",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "menu_item",
+   "label": "Food Item",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "remarks",
+   "label": "Instruction",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "scheduled_time",
+   "label": "Scheduled Time",
+   "fieldtype": "Time",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "quantity",
+   "label": "Quantity",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "preparation_notes",
+   "label": "Preparation Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "served_status",
+   "label": "Served Status",
+   "fieldtype": "Select",
+   "options": "\nPending\nServed\nSkipped",
+   "in_list_view": 1,
+   "default": "Pending"
+  },
+  {
+   "fieldname": "served_by",
+   "label": "Served By",
+   "fieldtype": "Link",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "intake_status",
+   "label": "Intake Status",
+   "fieldtype": "Select",
+   "options": "\nFull\nPartial\nRefused"
+  },
+  {
+   "fieldname": "date",
+   "label": "Date",
+   "fieldtype": "Date"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

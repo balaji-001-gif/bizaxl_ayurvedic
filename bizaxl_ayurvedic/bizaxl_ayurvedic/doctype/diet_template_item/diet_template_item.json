@@ -1,0 +1,45 @@
+{
+ "doctype": "DocType",
+ "name": "Diet Template Item",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Line item inside a reusable Diet Template.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "meal_time",
+   "label": "Meal Time",
+   "fieldtype": "Select",
+   "options": "Morning\nAfternoon\nEvening\nNight",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "food_item",
+   "label": "Food Item",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "instruction",
+   "label": "Instruction",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

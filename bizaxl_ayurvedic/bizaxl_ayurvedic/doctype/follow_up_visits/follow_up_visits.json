@@ -1,0 +1,63 @@
+{
+ "doctype": "DocType",
+ "name": "Follow-up Visits",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Individual scheduled follow-up visit row inside Treatment Follow-Up.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "follow_up_days",
+   "label": "Follow Up Days",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "follow_up_type",
+   "label": "Follow Up Type",
+   "fieldtype": "Select",
+   "options": "\nWeekly\nMonthly\nQuarterly\nHalf Yearly\nYearly\nCustom",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "visit_date",
+   "label": "Visit Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "next_follow_up_date",
+   "label": "Next Follow Up Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "\nPending\nCompleted\nMissed",
+   "in_list_view": 1,
+   "default": "Pending"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

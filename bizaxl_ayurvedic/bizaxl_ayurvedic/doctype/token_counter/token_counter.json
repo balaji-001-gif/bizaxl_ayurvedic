@@ -1,0 +1,113 @@
+{
+ "doctype": "DocType",
+ "name": "Token Counter",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Daily OPD token queue per practitioner; created automatically from Patient Appointment (After Insert hook) and shown live on the front-desk Token Queue dashboard.",
+ "icon": "fa fa-hashtag",
+ "fields": [
+  {
+   "fieldname": "section_break_tok",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "healthcare_practitioner",
+   "label": "Healthcare Practitioner",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "practitioner_name",
+   "label": "Practitioner Name",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "fetch_from": "healthcare_practitioner.practitioner_name"
+  },
+  {
+   "fieldname": "column_break_tok",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "patient_appointment",
+   "label": "Patient Appointment",
+   "fieldtype": "Link",
+   "options": "Patient Appointment"
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "fetch_from": "patient_appointment.patient_name"
+  },
+  {
+   "fieldname": "last_token",
+   "label": "Token Number",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "in_list_view": 1,
+   "non_negative": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "label": "Amended From",
+   "fieldtype": "Link",
+   "options": "Token Counter",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "practitioner_name",
+ "naming_rule": "Expression",
+ "autoname": "healthcare_practitioner.###"
+}

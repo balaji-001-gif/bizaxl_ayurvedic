@@ -1,0 +1,60 @@
+{
+ "doctype": "DocType",
+ "name": "Lab Test Parameter Detail",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Reference range row (per gender/age group) for a lab test parameter.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "parameter_name",
+   "label": "Parameter Name",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "gender__age_group",
+   "label": "Gender / Age Group",
+   "fieldtype": "Select",
+   "options": "\nMale\nFemale\nChildren\nOthers\nPregnant",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "unit",
+   "label": "Unit",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "range",
+   "label": "Normal Range",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "method_description",
+   "label": "Method Description",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "notes__description",
+   "label": "Notes / Description",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

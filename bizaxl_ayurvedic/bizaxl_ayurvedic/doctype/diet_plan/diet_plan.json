@@ -1,0 +1,230 @@
+{
+ "doctype": "DocType",
+ "name": "Diet Plan",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Ayurvedic diet plan with Dosha focus, fetched from Diet Templates, and used to auto-generate kitchen Meal Preparation Logs.",
+ "icon": "fa fa-leaf",
+ "fields": [
+  {
+   "fieldname": "personal_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Personal Details"
+  },
+  {
+   "fieldname": "section_break_patient",
+   "fieldtype": "Section Break",
+   "label": "Patient Details"
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "fetch_from": "patient.patient_name"
+  },
+  {
+   "fieldname": "column_break_patient",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "inpatient_record",
+   "label": "Inpatient Record",
+   "fieldtype": "Link",
+   "options": "Inpatient Record"
+  },
+  {
+   "fieldname": "admission_date",
+   "label": "Admission Date",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "wardbed",
+   "label": "Ward / Bed",
+   "fieldtype": "Link",
+   "options": "Healthcare Service Unit"
+  },
+  {
+   "fieldname": "section_break_prescription",
+   "fieldtype": "Section Break",
+   "label": "Prescription Details"
+  },
+  {
+   "fieldname": "prescribed_by",
+   "label": "Prescribed By",
+   "fieldtype": "Link",
+   "options": "Healthcare Practitioner"
+  },
+  {
+   "fieldname": "reviewed_by",
+   "label": "Reviewed By",
+   "fieldtype": "Link",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "column_break_prescription",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_date",
+   "label": "Start Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "end_date",
+   "label": "End Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "\nDraft\nActive\nCompleted\nCancelled",
+   "in_list_view": 1,
+   "default": "Draft",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "diet_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Diet Details"
+  },
+  {
+   "fieldname": "section_break_dietconfig",
+   "fieldtype": "Section Break",
+   "label": "Diet Configuration"
+  },
+  {
+   "fieldname": "diet_type",
+   "label": "Diet Type",
+   "fieldtype": "Select",
+   "options": "\nNormal\nDetox\nDiabetic\nAyurvedic\nLiquid"
+  },
+  {
+   "fieldname": "dosha_focus",
+   "label": "Dosha Focus",
+   "fieldtype": "Select",
+   "options": "\nVata\nPitta\nKapha\nMixed"
+  },
+  {
+   "fieldname": "column_break_dietconfig",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "calorie_target",
+   "label": "Calorie Target",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "water_intake_target",
+   "label": "Water Intake Target (L)",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "section_break_restrictions",
+   "fieldtype": "Section Break",
+   "label": "Restrictions / Notes"
+  },
+  {
+   "fieldname": "restricted_foods",
+   "label": "Restricted Foods",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "allergy_notes",
+   "label": "Allergy Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "column_break_restrictions",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "special_instructions",
+   "label": "Special Instructions",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "kitchen_notes",
+   "label": "Kitchen Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "diet_plan_tab",
+   "fieldtype": "Tab Break",
+   "label": "Diet Plan"
+  },
+  {
+   "fieldname": "section_break_schedule",
+   "fieldtype": "Section Break",
+   "label": "Diet Plan Meal Schedule"
+  },
+  {
+   "fieldname": "table_mcva",
+   "label": "Meal Schedule",
+   "fieldtype": "Table",
+   "options": "Diet Plan Meal Schedule"
+  },
+  {
+   "fieldname": "amended_from",
+   "label": "Amended From",
+   "fieldtype": "Link",
+   "options": "Diet Plan",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "patient_name",
+ "naming_rule": "Expression",
+ "autoname": "DIET.###"
+}

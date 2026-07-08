@@ -1,0 +1,107 @@
+{
+ "doctype": "DocType",
+ "name": "Bizaxl Ayurvedic Settings",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 1,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 0,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Central configuration for WhatsApp, OCR, LLM chatbot, and brand loyalty integrations used across the Bizaxl Ayurvedic app.",
+ "icon": "fa fa-cogs",
+ "fields": [
+  {
+   "fieldname": "sb_whatsapp",
+   "fieldtype": "Section Break",
+   "label": "WhatsApp Business Cloud API"
+  },
+  {
+   "fieldname": "whatsapp_phone_number_id",
+   "label": "Phone Number ID",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "whatsapp_access_token",
+   "label": "Access Token",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "cb_whatsapp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "whatsapp_webhook_verify_token",
+   "label": "Webhook Verify Token",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "sb_ocr",
+   "fieldtype": "Section Break",
+   "label": "Prescription OCR"
+  },
+  {
+   "fieldname": "ocr_provider",
+   "label": "OCR Provider",
+   "fieldtype": "Select",
+   "options": "tesseract\ngoogle_vision",
+   "default": "tesseract"
+  },
+  {
+   "fieldname": "sb_llm",
+   "fieldtype": "Section Break",
+   "label": "AI Chatbot / LLM"
+  },
+  {
+   "fieldname": "llm_api_endpoint",
+   "label": "LLM API Endpoint",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "llm_api_key",
+   "label": "LLM API Key",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "sb_loyalty",
+   "fieldtype": "Section Break",
+   "label": "Brand Loyalty Tie-Up"
+  },
+  {
+   "fieldname": "enable_brand_loyalty_tieup",
+   "label": "Enable Brand Loyalty Tie-Up (Dabur / Patanjali)",
+   "fieldtype": "Check",
+   "default": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": []
+}

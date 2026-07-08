@@ -1,0 +1,87 @@
+{
+ "doctype": "DocType",
+ "name": "Diet Template",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Reusable Dosha-aware diet template that can be fetched into a patient's Diet Plan.",
+ "icon": "fa fa-cutlery",
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "label": "Template Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "dosha_type",
+   "label": "Dosha Type",
+   "fieldtype": "Select",
+   "options": "Vata\nPitta\nKapha\nMixed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "diet_type",
+   "label": "Diet Type",
+   "fieldtype": "Select",
+   "options": "Normal\nDiabetic\nAyurvedic\nDetox\nLiquid",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "section_break_dtitems",
+   "fieldtype": "Section Break",
+   "label": "Template Items"
+  },
+  {
+   "fieldname": "items",
+   "label": "Template Items",
+   "fieldtype": "Table",
+   "options": "Diet Template Item"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "template_name",
+ "naming_rule": "By fieldname",
+ "autoname": "field:template_name"
+}

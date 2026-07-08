@@ -1,0 +1,46 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<div class="container" style="max-width:560px;margin-top:2rem;">
+	<h2>Book an Appointment{% if store %} — {{ store }}{% endif %}</h2>
+	<form id="booking-form">
+		<div class="form-group">
+			<label>Practitioner</label>
+			<select class="form-control" name="practitioner" required>
+				{% for p in practitioners %}
+				<option value="{{ p.name }}">{{ p.practitioner_name }} ({{ p.department or "" }})</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="form-group">
+			<label>Therapy</label>
+			<select class="form-control" name="therapy_type">
+				{% for t in therapy_types %}
+				<option value="{{ t.name }}">{{ t.therapy_type }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="form-group"><label>Date</label><input class="form-control" type="date" name="date" required></div>
+		<div class="form-group"><label>Time</label><input class="form-control" type="time" name="time" required></div>
+		<div class="form-group"><label>Your Name</label><input class="form-control" name="patient_name" required></div>
+		<div class="form-group"><label>Mobile Number</label><input class="form-control" name="mobile_number" required></div>
+		<button type="submit" class="btn btn-primary">Book Appointment</button>
+	</form>
+	<div id="booking-result" style="margin-top:1rem;"></div>
+</div>
+
+<script>
+document.getElementById("booking-form").addEventListener("submit", function (e) {
+	e.preventDefault();
+	const data = Object.fromEntries(new FormData(e.target).entries());
+	frappe.call({
+		method: "bizaxl_ayurvedic.www.book_appointment.submit_booking",
+		args: data,
+		callback: function (r) {
+			document.getElementById("booking-result").innerHTML =
+				"<div class='alert alert-success'>Booked! Reference: " + r.message.name + "</div>";
+		},
+	});
+});
+</script>
+{% endblock %}

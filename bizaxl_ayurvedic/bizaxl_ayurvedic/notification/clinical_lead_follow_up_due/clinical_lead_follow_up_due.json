@@ -1,0 +1,13 @@
+{
+ "doctype": "Notification",
+ "name": "Clinical Lead Follow Up Due",
+ "subject": "Follow up due today: {{ doc.lead_name }}",
+ "document_type": "Clinical Lead",
+ "event": "Value Change",
+ "value_changed": "follow_up_date",
+ "condition": "doc.follow_up_date and frappe.utils.getdate(doc.follow_up_date) <= frappe.utils.getdate(frappe.utils.today()) and doc.lead_status not in ('Converted', 'Lost')",
+ "channel": "System Notification",
+ "send_to_all_assignees": 1,
+ "enabled": 1,
+ "module": "Bizaxl Ayurvedic"
+}

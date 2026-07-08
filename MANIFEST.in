@@ -1,0 +1,2 @@
+recursive-include bizaxl_ayurvedic *.css *.less *.scss *.htm *.html *.js *.json *.md *.png *.svg *.py *.txt
+recursive-exclude bizaxl_ayurvedic *.pyc

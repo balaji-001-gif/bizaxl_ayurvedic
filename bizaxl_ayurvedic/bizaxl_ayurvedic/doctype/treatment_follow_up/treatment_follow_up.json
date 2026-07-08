@@ -1,0 +1,139 @@
+{
+ "doctype": "DocType",
+ "name": "Treatment Follow-Up",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Rolling Ayurvedic follow-up care plan per patient. A new visit row is appended automatically after every Patient Encounter (see the 'After Insert' hook), extending or creating the record as needed.",
+ "icon": "fa fa-calendar-check-o",
+ "fields": [
+  {
+   "fieldname": "section_break_tf1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "patient",
+   "label": "Patient",
+   "fieldtype": "Link",
+   "options": "Patient",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "consultation",
+   "label": "Consultation",
+   "fieldtype": "Link",
+   "options": "Patient Encounter"
+  },
+  {
+   "fieldname": "column_break_tf1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_date",
+   "label": "Start Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "expected_recovery_date",
+   "label": "Expected Recovery Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "disease_info_section",
+   "fieldtype": "Section Break",
+   "label": "Disease Info"
+  },
+  {
+   "fieldname": "diagnosis",
+   "label": "Diagnosis",
+   "fieldtype": "Link",
+   "options": "Diagnosis"
+  },
+  {
+   "fieldname": "case_type",
+   "label": "Case Type",
+   "fieldtype": "Select",
+   "options": "\nAcute\nChronic"
+  },
+  {
+   "fieldname": "column_break_tf2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "follow_up_after_days",
+   "label": "Follow Up After (Days)",
+   "fieldtype": "Int",
+   "default": 30
+  },
+  {
+   "fieldname": "total_treatment_duration_days",
+   "label": "Total Treatment Duration (Days)",
+   "fieldtype": "Int",
+   "default": 90
+  },
+  {
+   "fieldname": "section_break_tf3",
+   "fieldtype": "Section Break",
+   "label": "Scheduled Visits"
+  },
+  {
+   "fieldname": "follow_up_visits",
+   "label": "Follow Up Visits",
+   "fieldtype": "Table",
+   "options": "Follow-up Visits"
+  },
+  {
+   "fieldname": "amended_from",
+   "label": "Amended From",
+   "fieldtype": "Link",
+   "options": "Treatment Follow-Up",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "patient",
+ "naming_rule": "By fieldname",
+ "autoname": "field:patient"
+}

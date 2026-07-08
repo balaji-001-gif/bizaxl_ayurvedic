@@ -1,0 +1,61 @@
+{
+ "doctype": "DocType",
+ "name": "Healthcare Prescription Item",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Line item inside Healthcare Medication Prescription.",
+ "icon": "fa fa-file-text",
+ "fields": [
+  {
+   "fieldname": "medication",
+   "label": "Medication",
+   "fieldtype": "Link",
+   "options": "Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "dosage",
+   "label": "Dosage",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "frequency",
+   "label": "Frequency",
+   "fieldtype": "Select",
+   "options": "\nOD\nBD\nTID\nQID\n1-0-1\n1-1-1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "duration",
+   "label": "Duration (Days)",
+   "fieldtype": "Int",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "quantity",
+   "label": "Quantity",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "instructions",
+   "label": "Instructions",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "states": []
+}

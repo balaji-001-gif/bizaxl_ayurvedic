@@ -1,0 +1,13 @@
+{
+ "doctype": "Notification",
+ "name": "Treatment Follow Up Visit Due",
+ "subject": "Patient follow-up visit due: {{ doc.patient }}",
+ "document_type": "Treatment Follow-Up",
+ "event": "Days Before",
+ "date_changed": "expected_recovery_date",
+ "days_in_advance": 3,
+ "channel": "System Notification",
+ "send_to_all_assignees": 1,
+ "enabled": 1,
+ "module": "Bizaxl Ayurvedic"
+}

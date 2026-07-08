@@ -1,0 +1,14 @@
+{
+ "doctype": "Report",
+ "name": "Seasonal Reorder Forecast",
+ "report_name": "Seasonal Reorder Forecast",
+ "report_type": "Script Report",
+ "module": "Bizaxl Ayurvedic",
+ "ref_doctype": "Item",
+ "is_standard": "Yes",
+ "disabled": 0,
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Stock Manager"}
+ ]
+}

@@ -1,0 +1,72 @@
+{
+ "doctype": "DocType",
+ "name": "Lab Test Parameter Reference",
+ "module": "Bizaxl Ayurvedic",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "is_tree": 0,
+ "editable_grid": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "allow_import": 1,
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "description": "Normal-range reference sheet per Lab Test Template \u2014 surfaced automatically on the Lab Test form as a dashboard panel (Clinical Decision Support gap).",
+ "icon": "fa fa-flask",
+ "fields": [
+  {
+   "fieldname": "section_break_ltpr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lab_test",
+   "label": "Lab Test Template",
+   "fieldtype": "Link",
+   "options": "Lab Test Template",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "lab_test_parameter_detail",
+   "label": "Reference Ranges",
+   "fieldtype": "Table",
+   "options": "Lab Test Parameter Detail"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 0,
+   "cancel": 0,
+   "amend": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Healthcare Practitioner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "links": [],
+ "states": [],
+ "title_field": "lab_test",
+ "naming_rule": "By fieldname",
+ "autoname": "field:lab_test"
+}

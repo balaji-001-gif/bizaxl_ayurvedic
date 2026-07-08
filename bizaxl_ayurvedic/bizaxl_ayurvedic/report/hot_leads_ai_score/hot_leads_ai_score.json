@@ -1,0 +1,14 @@
+{
+ "doctype": "Report",
+ "name": "Hot Leads (AI Score)",
+ "report_name": "Hot Leads (AI Score)",
+ "report_type": "Script Report",
+ "module": "Bizaxl Ayurvedic",
+ "ref_doctype": "Clinical Lead",
+ "is_standard": "Yes",
+ "disabled": 0,
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Healthcare Practitioner"}
+ ]
+}

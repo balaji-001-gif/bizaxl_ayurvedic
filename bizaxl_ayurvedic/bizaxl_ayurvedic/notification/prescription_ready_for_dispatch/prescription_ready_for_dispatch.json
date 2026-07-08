@@ -1,0 +1,13 @@
+{
+ "doctype": "Notification",
+ "name": "Prescription Ready For Dispatch",
+ "subject": "Prescription {{ doc.name }} approved and ready to dispense",
+ "document_type": "Healthcare Medication Prescription",
+ "event": "Value Change",
+ "value_changed": "status",
+ "condition": "doc.status == 'Approved'",
+ "channel": "System Notification",
+ "send_to_all_assignees": 1,
+ "enabled": 1,
+ "module": "Bizaxl Ayurvedic"
+}

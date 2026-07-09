@@ -177,13 +177,14 @@ function show_cost_dialog(frm, template_name) {
 			cost_dlg.fields_dict.cost_html.$wrapper.html(html);
 			cost_dlg.show();
 		},
-		error(r) {
+		error(xhr) {
+			const resp = xhr.responseJSON || {};
 			frappe.msgprint({
 				title: __("Server Error"),
-				message: r.message || __("Could not fetch treatment plan cost. Check console for details."),
+				message: resp.message || __("Could not fetch treatment plan cost. Check console for details."),
 				indicator: "red",
 			});
-			console.error("get_treatment_plan_cost error:", r);
+			console.error("get_treatment_plan_cost error:", xhr.responseText);
 		},
 	});
 }

@@ -37,7 +37,7 @@ doctype_js = {
 # ------------------------------------------------------------------
 doc_events = {
     "Patient Encounter": {
-        "after_insert": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.treatment_follow_up.treatment_follow_up.create_or_extend_from_encounter",
+        "on_submit": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.treatment_follow_up.treatment_follow_up.create_or_extend_from_encounter",
     },
     "Sales Invoice": {
         "on_submit": "bizaxl_ayurvedic.ai.feedback_collector.request_feedback_after_billing",

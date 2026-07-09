@@ -66,7 +66,8 @@ function updateItemOptions(cdt, cdn) {
 
 	// Update each possible Link field's options to point to the correct master doctype
 	for (const f of ITEM_LINK_FIELDS) {
-		frappe.meta.get_docfield(cdt, f, row.parent).options = cfg.doctype;
+		const df = frappe.meta.get_docfield(cdt, f, row.parent);
+		if (df) df.options = cfg.doctype;
 		frappe.model.set_value(cdt, cdn, f, null);
 	}
 }

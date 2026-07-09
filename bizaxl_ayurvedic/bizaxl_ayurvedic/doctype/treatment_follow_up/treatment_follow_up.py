@@ -6,7 +6,44 @@ from frappe.model.document import Document
 
 
 class TreatmentFollowUp(Document):
-    pass
+    def validate(self):
+        """Auto-create the next pending visit row when an existing row's status
+        changes to 'Completed'. Only triggers for rows that existed *before*
+        this save (i.e. were already persisted) — newly appended rows from
+        create_or_extend_from_encounter are excluded because that function
+        already creates the next pending row."""
+        if self.is_new() or not self.follow_up_visits:
+            return
+
+        previous = self.get_doc_before_save()
+        if not previous:
+            return
+
+        prev_statuses = {r.name: r.status for r in (previous.follow_up_visits or [])}
+        interval = self.follow_up_after_days or 30
+        add_days = frappe.utils.add_days
+        getdate = frappe.utils.getdate
+
+        for row in self.follow_up_visits:
+            prev_status = prev_statuses.get(row.name)
+            # Only act on EXISTING rows whose status changed TO Completed.
+            # New rows appended by create_or_extend_from_encounter have
+            # prev_status = None and are safely skipped.
+            if prev_status is not None and prev_status != "Completed" and row.status == "Completed":
+                next_date = row.next_follow_up_date or add_days(
+                    getdate(row.visit_date or self.start_date), interval
+                )
+                # Guard: don't duplicate an already-scheduled Pending visit
+                already_exists = any(
+                    r.status == "Pending" and r.visit_date == next_date
+                    for r in self.follow_up_visits
+                )
+                if not already_exists:
+                    self.append("follow_up_visits", {
+                        "visit_date": next_date,
+                        "next_follow_up_date": add_days(getdate(next_date), interval),
+                        "status": "Pending",
+                    })
 
 
 def create_or_extend_from_encounter(doc, method=None):

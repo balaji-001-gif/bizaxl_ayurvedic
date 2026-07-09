@@ -38,29 +38,27 @@ function show_treatment_plan_buttons(frm) {
 			show_cost_dialog(frm, frm.doc.treatment_plan_template);
 		}, __("Treatment Plans"));
 
-		frm.add_custom_button(__("Share Cost on WhatsApp"), () => {
-			if (!frm.doc.mobile_number) {
-				frappe.msgprint(__("Lead has no mobile number."));
-				return;
-			}
-			frappe.call({
-				method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
-				args: {
-					template_name: frm.doc.treatment_plan_template,
-					mobile_number: frm.doc.mobile_number,
-				},
-				callback(res) {
-					if (res.message && res.message.sent) {
-						frappe.show_alert({
-							message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
-							indicator: "green",
-						});
-					} else {
-						frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
-					}
-				},
-			});
-		}, __("Treatment Plans"));
+		if (frm.doc.mobile_number) {
+			frm.add_custom_button(__("Share Cost on WhatsApp"), () => {
+				frappe.call({
+					method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
+					args: {
+						template_name: frm.doc.treatment_plan_template,
+						mobile_number: frm.doc.mobile_number,
+					},
+					callback(res) {
+						if (res.message && res.message.sent) {
+							frappe.show_alert({
+								message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
+								indicator: "green",
+							});
+						} else {
+							frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
+						}
+					},
+				});
+			}, __("Treatment Plans"));
+		}
 	} else {
 		// No plan linked — prompt to select one
 		frm.add_custom_button(__("Select Treatment Plan"), () => {

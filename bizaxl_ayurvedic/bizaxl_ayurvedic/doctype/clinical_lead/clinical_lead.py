@@ -100,6 +100,10 @@ def populate_plan_rates_from_masters(doc, method=None):
     linked master doctype (Therapy Type, Clinical Procedure Template,
     Lab Test Template) so the rate is visible in the grid and can be
     customised per item without looking up the master each time.
+
+    Also auto-populates the `rate` field on each drug row from the
+    Item master's standard_rate, with a guard to preserve manually
+    entered rates.
     """
     for item in getattr(doc, "items", []):
         # Only auto-populate if plan_rate is not already set manually
@@ -120,6 +124,16 @@ def populate_plan_rates_from_masters(doc, method=None):
                 if master.get(f):
                     item.plan_rate = master.get(f)
                     break
+
+    # Auto-populate drug rates from Item master (skip if already set manually)
+    for drug in getattr(doc, "drugs", []):
+        if getattr(drug, "rate", None):
+            continue  # Preserve manually entered rate
+        if not getattr(drug, "drug_code", None):
+            continue
+        standard_rate = frappe.db.get_value("Item", drug.drug_code, "standard_rate")
+        if standard_rate:
+            drug.rate = standard_rate
 
 
 def _compute_cost_breakdown(template):
@@ -148,8 +162,10 @@ def _compute_cost_breakdown(template):
         details.append({"name": item_template, "type": item_type, "qty": qty, "rate": rate, "amount": amount})
 
     for drug in getattr(template, "drugs", []):
-        # Try multiple rate fields (matching client-side logic)
-        drug_rate_fields = ["rate", "price", "unit_price", "amount", "unit_rate", "selling_price"]
+        # Try multiple rate fields. `amount` is intentionally excluded
+        # because Drug Prescription's amount = rate * qty, so using it
+        # as a unit rate would produce wrong totals.
+        drug_rate_fields = ["rate", "price", "unit_price", "unit_rate", "selling_price"]
         rate = 0
         for f in drug_rate_fields:
             val = getattr(drug, f, None)

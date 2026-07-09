@@ -45,29 +45,28 @@ function show_treatment_plan_buttons(frm) {
 			show_cost_dialog(frm, frm.doc.treatment_plan_template);
 		}, __("Treatment Plans"));
 
-		frm.add_custom_button(__("Share Cost on WhatsApp"), () => {
-			frappe.db.get_value("Patient", frm.doc.patient, "mobile", (r) => {
-				let mobile = r ? r.mobile : "";
-				if (!mobile) {
-					frappe.msgprint(__("Patient has no mobile number on file."));
-					return;
-				}
-				frappe.call({
-					method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
-					args: { template_name: frm.doc.treatment_plan_template, mobile_number: mobile },
-					callback(res) {
-						if (res.message && res.message.sent) {
-							frappe.show_alert({
-								message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${mobile}`,
-								indicator: "green",
-							});
-						} else {
-							frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
-						}
-					},
-				});
-			});
-		}, __("Treatment Plans"));
+		// Check if patient has a mobile number before showing WhatsApp button
+		frappe.db.get_value("Patient", frm.doc.patient, "mobile", (r) => {
+			let mobile = r ? r.mobile : "";
+			if (mobile) {
+				frm.add_custom_button(__("Share Cost on WhatsApp"), () => {
+					frappe.call({
+						method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
+						args: { template_name: frm.doc.treatment_plan_template, mobile_number: mobile },
+						callback(res) {
+							if (res.message && res.message.sent) {
+								frappe.show_alert({
+									message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${mobile}`,
+									indicator: "green",
+								});
+							} else {
+								frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
+							}
+						},
+					});
+				}, __("Treatment Plans"));
+			}
+		});
 	} else {
 		// No plan linked — prompt to select one
 		frm.add_custom_button(__("Select Treatment Plan"), () => {

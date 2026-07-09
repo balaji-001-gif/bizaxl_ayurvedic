@@ -44,7 +44,7 @@ doc_events = {
         "on_submit": "bizaxl_ayurvedic.ai.feedback_collector.request_feedback_after_billing",
     },
     "Treatment Plan Template": {
-        "validate": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.populate_plan_rates_from_masters",
+        "validate": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.populate_drug_rates_from_master",
     },
 }
 

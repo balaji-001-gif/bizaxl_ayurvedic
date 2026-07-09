@@ -4,3 +4,4 @@ bizaxl_ayurvedic.patches.v0_3.add_settings_and_translation_fields
 bizaxl_ayurvedic.patches.v0_4.add_token_status_fields
 bizaxl_ayurvedic.patches.v0_5.add_treatment_plan_field
 bizaxl_ayurvedic.patches.v0_6.add_plan_rate_field
+bizaxl_ayurvedic.patches.v0_7.remove_plan_rate_field

@@ -155,39 +155,14 @@ def share_treatment_cost_via_whatsapp(template_name, mobile_number):
     return {"sent": bool(result), "total": cost_result["total"], "mobile": mobile_number}
 
 
-def populate_plan_rates_from_masters(doc, method=None):
+def populate_drug_rates_from_master(doc, method=None):
     """DocType Event: Treatment Plan Template -> validate.
 
-    Auto-populates the `plan_rate` field on each item row from the
-    linked master doctype (Therapy Type, Clinical Procedure Template,
-    Lab Test Template) so the rate is visible in the grid and can be
-    customised per item without looking up the master each time.
-
-    Also auto-populates the `rate` field on each drug row from the
-    Item master's standard_rate, with a guard to preserve manually
-    entered rates.
+    Auto-populates the `rate` field on each drug row from the Item
+    master's standard_rate, with a guard to preserve manually
+    entered rates. Item plan rates are now always fetched live from
+    the master doctype during cost breakdown (see _compute_cost_breakdown).
     """
-    for item in getattr(doc, "items", []):
-        # Only auto-populate if plan_rate is not already set manually
-        if getattr(item, "plan_rate", None):
-            continue
-        item_type = getattr(item, "item_type", None)
-        item_code = _get_item_code(item)
-        if not item_type or not item_code:
-            continue
-        config = ITEM_TYPE_CONFIG.get(item_type)
-        if not config:
-            continue
-        master = frappe.db.get_value(
-            config["doctype"], item_code, config["rate_fields"], as_dict=True
-        )
-        if master:
-            for f in config["rate_fields"]:
-                if master.get(f):
-                    item.plan_rate = master.get(f)
-                    break
-
-    # Auto-populate drug rates from Item master (skip if already set manually)
     for drug in getattr(doc, "drugs", []):
         if getattr(drug, "rate", None):
             continue  # Preserve manually entered rate
@@ -207,18 +182,18 @@ def _compute_cost_breakdown(template):
         item_type = getattr(item, "item_type", None)
         item_code = _get_item_code(item)
         qty = getattr(item, "qty", 1) or 1
-        # Pick rate from item row (try plan_rate first, then rate),
-        # then fall back to master doctype
-        rate = getattr(item, "plan_rate", None) or getattr(item, "rate", None) or 0
-        if not rate:
-            config = ITEM_TYPE_CONFIG.get(item_type)
-            if config and item_code:
-                master = frappe.db.get_value(config["doctype"], item_code, config["rate_fields"], as_dict=True)
-                if master:
-                    for f in config["rate_fields"]:
-                        if master.get(f):
-                            rate = master.get(f)
-                            break
+        # Fetch rate directly from master doctype (Therapy Type, Clinical
+        # Procedure Template, Lab Test Template). The `rate` field on the
+        # child row is only used for drugs; plan item rates come from master.
+        rate = 0
+        config = ITEM_TYPE_CONFIG.get(item_type)
+        if config and item_code:
+            master = frappe.db.get_value(config["doctype"], item_code, config["rate_fields"], as_dict=True)
+            if master:
+                for f in config["rate_fields"]:
+                    if master.get(f):
+                        rate = master.get(f)
+                        break
         amount = rate * qty
         total += amount
         details.append({"name": item_code or item_type or "Item", "type": item_type or "", "qty": qty, "rate": rate, "amount": amount})

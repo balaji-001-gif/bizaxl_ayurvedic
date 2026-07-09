@@ -156,6 +156,18 @@
    "fieldtype": "Small Text"
   },
   {
+   "fieldname": "section_break_treatment_plan",
+   "fieldtype": "Section Break",
+   "label": "Treatment Plan"
+  },
+  {
+   "fieldname": "treatment_plan_template",
+   "label": "Treatment Plan Template",
+   "fieldtype": "Link",
+   "options": "Treatment Plan Template",
+   "in_list_view": 1
+  },
+  {
    "fieldname": "section_break_conversion",
    "fieldtype": "Section Break",
    "label": "Conversion"

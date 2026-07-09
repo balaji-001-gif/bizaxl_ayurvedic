@@ -111,8 +111,9 @@ def _compute_cost_breakdown(template):
         item_type = getattr(item, "item_type", None)
         item_template = getattr(item, "template", None)
         qty = getattr(item, "qty", 1) or 1
-        # Prefer the rate set directly on the item row; fall back to master doctype
-        rate = getattr(item, "rate", None) or 0
+        # Pick rate from item row (try plan_rate first, then rate),
+        # then fall back to master doctype
+        rate = getattr(item, "plan_rate", None) or getattr(item, "rate", None) or 0
         if not rate:
             config = item_type_config.get(item_type)
             if config and item_template:

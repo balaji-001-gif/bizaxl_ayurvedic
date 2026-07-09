@@ -24,67 +24,120 @@ frappe.ui.form.on("Clinical Lead", {
 			);
 		}
 
-		frm.add_custom_button(__("Treatment Plan Cost"), () => {
+		// ── Treatment Plan Cost — Show & Share ──
+		show_treatment_plan_buttons(frm);
+	},
+});
+
+function show_treatment_plan_buttons(frm) {
+	let has_plan = frm.doc.treatment_plan_template;
+
+	if (has_plan) {
+		// One-click View Cost — uses the saved plan template directly
+		frm.add_custom_button(__("View Treatment Plan Cost"), () => {
+			show_cost_dialog(frm, frm.doc.treatment_plan_template);
+		}, __("Treatment Plans"));
+
+		frm.add_custom_button(__("Share Cost on WhatsApp"), () => {
+			if (!frm.doc.mobile_number) {
+				frappe.msgprint(__("Lead has no mobile number."));
+				return;
+			}
 			frappe.call({
-				method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_templates",
+				method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
+				args: {
+					template_name: frm.doc.treatment_plan_template,
+					mobile_number: frm.doc.mobile_number,
+				},
 				callback(res) {
-					const templates = res.message || [];
-					if (!templates.length) {
-						frappe.msgprint(__("No active treatment plan templates found."));
-						return;
+					if (res.message && res.message.sent) {
+						frappe.show_alert({
+							message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
+							indicator: "green",
+						});
+					} else {
+						frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
 					}
-					let dlg = new frappe.ui.Dialog({
-						title: __("Select Treatment Plan"),
-						fields: [{
-							fieldname: "template",
-							label: __("Treatment Plan"),
-							fieldtype: "Select",
-							options: templates.map((t) => t.name).join("\n"),
-							reqd: 1,
-						}],
-						primary_action_label: __("Show Cost Breakdown"),
-						primary_action(values) {
-							dlg.hide();
-							frappe.call({
-								method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_cost",
-								args: { template_name: values.template },
-								callback(r) {
-									let cost_html = r.message || "<p>No cost data</p>";
-									let cost_dlg = new frappe.ui.Dialog({
-										title: __("Cost Breakdown"),
-										size: "extra-large",
-										fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
-										primary_action_label: __("📤 Share on WhatsApp"),
-										primary_action() {
-											cost_dlg.hide();
-											frappe.call({
-												method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
-												args: {
-													template_name: values.template,
-													mobile_number: frm.doc.mobile_number,
-												},
-												callback(res) {
-													if (res.message && res.message.sent) {
-														frappe.show_alert({
-															message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
-															indicator: "green",
-														});
-													} else {
-														frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
-													}
-												},
-											});
-										},
-									});
-									cost_dlg.fields_dict.cost_html.$wrapper.html(cost_html);
-									cost_dlg.show();
-								},
-							});
-						},
-					});
-					dlg.show();
 				},
 			});
 		}, __("Treatment Plans"));
-	},
-});
+	} else {
+		// No plan linked — prompt to select one
+		frm.add_custom_button(__("Select Treatment Plan"), () => {
+			pick_template_and_show_cost(frm);
+		}, __("Treatment Plans"));
+	}
+}
+
+function pick_template_and_show_cost(frm) {
+	frappe.call({
+		method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_templates",
+		callback(res) {
+			const templates = res.message || [];
+			if (!templates.length) {
+				frappe.msgprint(__("No active treatment plan templates found."));
+				return;
+			}
+			let dlg = new frappe.ui.Dialog({
+				title: __("Select Treatment Plan"),
+				fields: [{
+					fieldname: "template",
+					label: __("Treatment Plan"),
+					fieldtype: "Select",
+					options: templates.map((t) => t.name).join("\n"),
+					reqd: 1,
+				}],
+				primary_action_label: __("Show Cost"),
+				primary_action(values) {
+					dlg.hide();
+					show_cost_dialog(frm, values.template);
+				},
+			});
+			dlg.show();
+		},
+	});
+}
+
+function show_cost_dialog(frm, template_name) {
+	frappe.call({
+		method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_cost",
+		args: { template_name },
+		callback(r) {
+			let cost_html = r.message || "<p>No cost data</p>";
+			let plan_name = template_name;
+			let cost_dlg = new frappe.ui.Dialog({
+				title: `📋 ${plan_name}`,
+				size: "extra-large",
+				fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
+				primary_action_label: __("📤 Share on WhatsApp"),
+				primary_action() {
+					cost_dlg.hide();
+					share_cost_via_whatsapp(frm, template_name);
+				},
+			});
+			cost_dlg.fields_dict.cost_html.$wrapper.html(cost_html);
+			cost_dlg.show();
+		},
+	});
+}
+
+function share_cost_via_whatsapp(frm, template_name) {
+	if (!frm.doc.mobile_number) {
+		frappe.msgprint(__("Lead has no mobile number."));
+		return;
+	}
+	frappe.call({
+		method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
+		args: { template_name, mobile_number: frm.doc.mobile_number },
+		callback(res) {
+			if (res.message && res.message.sent) {
+				frappe.show_alert({
+					message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
+					indicator: "green",
+				});
+			} else {
+				frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
+			}
+		},
+	});
+}

@@ -92,14 +92,22 @@ function show_cost_dialog(frm, template_name) {
 			const total = data.total || 0;
 			const plan_name = data.template_name || template_name;
 
+			// Helper: safe currency formatting (guards against missing frappe.utils.format_currency)
+			const fmtCurrency = (val) => {
+				if (typeof frappe.utils.format_currency === "function") {
+					return frappe.utils.format_currency(val, "INR");
+				}
+				return "₹" + Number(val || 0).toLocaleString("en-IN");
+			};
+
 			let rows = "";
 			details.forEach(d => {
 				rows += `<tr>
 					<td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${d.name}</td>
 					<td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${d.type}</td>
 					<td style="padding: 12px; text-align: center; border-bottom: 1px solid #e2e8f0;">${d.qty}</td>
-					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${frappe.utils.format_currency(d.rate, "INR")}</td>
-					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${frappe.utils.format_currency(d.amount, "INR")}</td>
+					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${fmtCurrency(d.rate)}</td>
+					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${fmtCurrency(d.amount)}</td>
 				</tr>`;
 			});
 
@@ -125,25 +133,34 @@ function show_cost_dialog(frm, template_name) {
 					<tfoot>
 						<tr style="background-color: #f0fdf4; border-top: 2px solid #00f2b4;">
 							<td colspan="4" style="padding: 12px; text-align: right; font-weight: 700; font-size: 14px;">Total</td>
-							<td style="padding: 12px; text-align: right; font-weight: 700; font-size: 14px; color: #003960;">${frappe.utils.format_currency(total, "INR")}</td>
+							<td style="padding: 12px; text-align: right; font-weight: 700; font-size: 14px; color: #003960;">${fmtCurrency(total)}</td>
 						</tr>
 					</tfoot>
 				</table>
 			</div>
 			`;
 
-			let cost_dlg = new frappe.ui.Dialog({
-				title: `📋 ${plan_name}`,
-				size: "extra-large",
-				fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
-				primary_action_label: __("📤 Share on WhatsApp"),
-				primary_action() {
-					cost_dlg.hide();
-					share_cost_via_whatsapp(frm, template_name);
-				},
-			});
-			cost_dlg.fields_dict.cost_html.$wrapper.html(html);
-			cost_dlg.show();
+			try {
+				let cost_dlg = new frappe.ui.Dialog({
+					title: `📋 ${plan_name}`,
+					size: "large",
+					fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
+					primary_action_label: __("📤 Share on WhatsApp"),
+					primary_action() {
+						cost_dlg.hide();
+						share_cost_via_whatsapp(frm, template_name);
+					},
+				});
+				cost_dlg.fields_dict.cost_html.$wrapper.html(html);
+				cost_dlg.show();
+			} catch (e) {
+				console.error("cost_dialog error:", e);
+				frappe.msgprint({
+					title: __("Dialog Error"),
+					message: e.message,
+					indicator: "red",
+				});
+			}
 		},
 		error(xhr) {
 			const resp = xhr.responseJSON || {};

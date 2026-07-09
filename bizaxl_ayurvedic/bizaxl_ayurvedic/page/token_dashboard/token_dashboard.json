@@ -1,0 +1,8 @@
+{
+ "name": "Token Dashboard",
+ "icon": "fa fa-hashtag",
+ "label": "Token Dashboard",
+ "route": "token-dashboard",
+ "roles": ["System Manager", "Healthcare Practitioner"],
+ "module": "Bizaxl Ayurvedic"
+}

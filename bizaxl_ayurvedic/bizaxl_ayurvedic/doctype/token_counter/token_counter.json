@@ -15,7 +15,7 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "engine": "InnoDB",
- "description": "Daily OPD token queue per practitioner; created automatically from Patient Appointment (After Insert hook) and shown live on the front-desk Token Queue dashboard.",
+ "description": "Daily OPD token queue per practitioner; created automatically from Patient Appointment (After Insert hook) and shown live on the front-desk Token Dashboard.",
  "icon": "fa fa-hashtag",
  "fields": [
   {
@@ -62,12 +62,31 @@
    "fetch_from": "patient_appointment.patient_name"
   },
   {
+   "fieldname": "patient_mobile",
+   "label": "Patient Mobile",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
    "fieldname": "last_token",
    "label": "Token Number",
    "fieldtype": "Int",
    "reqd": 1,
    "in_list_view": 1,
    "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "\nWaiting\nIn Consultation\nCompleted\nCalled",
+   "default": "Waiting",
+   "in_list_view": 1
   },
   {
    "fieldname": "amended_from",

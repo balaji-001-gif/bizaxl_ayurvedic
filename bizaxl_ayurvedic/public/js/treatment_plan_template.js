@@ -61,7 +61,6 @@ function updateTemplateOptions(cdt, cdn) {
 		},
 		item_type(frm, cdt, cdn) {
 			updateTemplateOptions(cdt, cdn);
-			fetchPlanRate(cdt, cdn);
 		},
 	});
 });

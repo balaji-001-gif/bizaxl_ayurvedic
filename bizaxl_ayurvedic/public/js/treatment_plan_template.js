@@ -5,14 +5,11 @@
 // hooks.doctype_js). When a user selects a Therapy Type, Clinical Procedure,
 // or Lab Test Template in the Items grid, this handler automatically fetches
 // the rate from the master doctype and populates the plan_rate field.
+//
+// The Link field for the item master may be named "template" or "item_code"
+// depending on the Frappe Healthcare version; we handle both.
 
 // ── Item row: auto-fetch rate from master doctype into plan_rate ──
-// The child table doctype may be "Treatment Plan Template Item" or
-// "Treatment Plan Item" depending on the Frappe Health version.
-//
-// Fires on both `item_type` (type) and `template` field changes so the
-// plan_rate is always kept in sync regardless of which field the user
-// edits first or changes later.
 
 // Map item_type → master doctype and rate field
 const ITEM_CONFIG = {
@@ -24,45 +21,70 @@ const ITEM_CONFIG = {
 	"Lab Test":                  { doctype: "Lab Test Template",         field: "lab_test_rate" },
 };
 
+// The Link field may be "template" or "item_code" depending on Frappe Health version
+const ITEM_LINK_FIELDS = ["template", "item_code"];
+
+function getItemCode(row) {
+	// Try all possible Link field names
+	for (const f of ITEM_LINK_FIELDS) {
+		if (row[f]) return row[f];
+	}
+	return null;
+}
+
+function setItemCode(cdt, cdn, value) {
+	// Try all possible Link field names
+	for (const f of ITEM_LINK_FIELDS) {
+		frappe.model.set_value(cdt, cdn, f, value);
+	}
+}
+
 function fetchPlanRate(cdt, cdn) {
 	const row = frappe.get_doc(cdt, cdn);
-	if (!row.template || !row.item_type) return;
+	const itemCode = getItemCode(row);
+	if (!itemCode || !row.item_type) return;
 
 	const cfg = ITEM_CONFIG[row.item_type];
 	if (!cfg) return;
 
-	frappe.db.get_value(cfg.doctype, row.template, cfg.field, (r) => {
+	frappe.db.get_value(cfg.doctype, itemCode, cfg.field, (r) => {
 		const rate = r ? r[cfg.field] : 0;
 		frappe.model.set_value(cdt, cdn, "plan_rate", rate || 0);
 	});
 }
 
-function updateTemplateOptions(cdt, cdn) {
+function updateItemOptions(cdt, cdn) {
 	const row = frappe.get_doc(cdt, cdn);
 	if (!row.item_type) return;
 
 	const cfg = ITEM_CONFIG[row.item_type];
 	if (!cfg) {
-		// Unknown type — clear template
-		frappe.model.set_value(cdt, cdn, "template", null);
+		// Unknown type — clear all link fields
+		setItemCode(cdt, cdn, null);
 		return;
 	}
 
-	// Update the template Link field to point to the correct master doctype
-	frappe.meta.get_docfield(cdt, "template", row.parent).options = cfg.doctype;
-	// Clear the template value since the target doctype changed
-	frappe.model.set_value(cdt, cdn, "template", null);
+	// Update each possible Link field's options to point to the correct master doctype
+	for (const f of ITEM_LINK_FIELDS) {
+		frappe.meta.get_docfield(cdt, f, row.parent).options = cfg.doctype;
+		frappe.model.set_value(cdt, cdn, f, null);
+	}
 }
 
+// Register handlers for each possible child table doctype AND each possible link field name
 ["Treatment Plan Template Item", "Treatment Plan Item"].forEach((dt) => {
-	frappe.ui.form.on(dt, {
-		template(frm, cdt, cdn) {
-			fetchPlanRate(cdt, cdn);
-		},
+	const events = {
 		item_type(frm, cdt, cdn) {
-			updateTemplateOptions(cdt, cdn);
+			updateItemOptions(cdt, cdn);
 		},
+	};
+	// Register handler for every possible link field name
+	ITEM_LINK_FIELDS.forEach((fieldName) => {
+		events[fieldName] = function(frm, cdt, cdn) {
+			fetchPlanRate(cdt, cdn);
+		};
 	});
+	frappe.ui.form.on(dt, events);
 });
 
 // ── Drug row: auto-fetch rate from Item master into rate ──

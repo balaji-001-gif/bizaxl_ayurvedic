@@ -14,6 +14,19 @@ ITEM_TYPE_CONFIG = {
     "Therapy": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
 }
 
+# The Link field on Treatment Plan Template Item child table may be named
+# "template" or "item_code" depending on the Frappe Healthcare version.
+ITEM_LINK_FIELDS = ["template", "item_code"]
+
+
+def _get_item_code(item):
+    """Try all possible Link field names to get the item master code."""
+    for f in ITEM_LINK_FIELDS:
+        val = getattr(item, f, None)
+        if val:
+            return val
+    return None
+
 
 class ClinicalLead(Document):
     def before_insert(self):
@@ -159,14 +172,14 @@ def populate_plan_rates_from_masters(doc, method=None):
         if getattr(item, "plan_rate", None):
             continue
         item_type = getattr(item, "item_type", None)
-        item_template = getattr(item, "template", None)
-        if not item_type or not item_template:
+        item_code = _get_item_code(item)
+        if not item_type or not item_code:
             continue
         config = ITEM_TYPE_CONFIG.get(item_type)
         if not config:
             continue
         master = frappe.db.get_value(
-            config["doctype"], item_template, config["rate_fields"], as_dict=True
+            config["doctype"], item_code, config["rate_fields"], as_dict=True
         )
         if master:
             for f in config["rate_fields"]:
@@ -192,15 +205,15 @@ def _compute_cost_breakdown(template):
 
     for item in getattr(template, "items", []):
         item_type = getattr(item, "item_type", None)
-        item_template = getattr(item, "template", None)
+        item_code = _get_item_code(item)
         qty = getattr(item, "qty", 1) or 1
         # Pick rate from item row (try plan_rate first, then rate),
         # then fall back to master doctype
         rate = getattr(item, "plan_rate", None) or getattr(item, "rate", None) or 0
         if not rate:
             config = ITEM_TYPE_CONFIG.get(item_type)
-            if config and item_template:
-                master = frappe.db.get_value(config["doctype"], item_template, config["rate_fields"], as_dict=True)
+            if config and item_code:
+                master = frappe.db.get_value(config["doctype"], item_code, config["rate_fields"], as_dict=True)
                 if master:
                     for f in config["rate_fields"]:
                         if master.get(f):
@@ -208,7 +221,7 @@ def _compute_cost_breakdown(template):
                             break
         amount = rate * qty
         total += amount
-        details.append({"name": item_template, "type": item_type, "qty": qty, "rate": rate, "amount": amount})
+        details.append({"name": item_code or item_type or "Item", "type": item_type or "", "qty": qty, "rate": rate, "amount": amount})
 
     for drug in getattr(template, "drugs", []):
         # Try multiple rate fields. `amount` is intentionally excluded

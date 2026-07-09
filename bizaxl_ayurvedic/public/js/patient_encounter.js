@@ -114,6 +114,12 @@ function show_cost_dialog(frm, template_name) {
 				return;
 			}
 			const data = r.message;
+			// Guard: if the server returned a string (e.g. cached old HTML),
+			// treat it as empty rather than crashing on .details
+			if (typeof data === "string") {
+				frappe.msgprint(__("Unexpected response format. Please clear cache and refresh."));
+				return;
+			}
 			const details = data.details || [];
 			const total = data.total || 0;
 			const plan_name = data.template_name || template_name;
@@ -170,6 +176,14 @@ function show_cost_dialog(frm, template_name) {
 			});
 			cost_dlg.fields_dict.cost_html.$wrapper.html(html);
 			cost_dlg.show();
+		},
+		error(r) {
+			frappe.msgprint({
+				title: __("Server Error"),
+				message: r.message || __("Could not fetch treatment plan cost. Check console for details."),
+				indicator: "red",
+			});
+			console.error("get_treatment_plan_cost error:", r);
 		},
 	});
 }

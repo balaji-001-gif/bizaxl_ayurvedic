@@ -24,7 +24,7 @@ frappe.ui.form.on("Clinical Lead", {
 			);
 		}
 
-		frm.add_custom_button(__("Calculate Treatment Plan Cost"), () => {
+		frm.add_custom_button(__("Treatment Plan Cost"), () => {
 			frappe.call({
 				method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_templates",
 				callback(res) {
@@ -33,8 +33,8 @@ frappe.ui.form.on("Clinical Lead", {
 						frappe.msgprint(__("No active treatment plan templates found."));
 						return;
 					}
-					let d = new frappe.ui.Dialog({
-						title: __("Select Treatment Plan Template"),
+					let dlg = new frappe.ui.Dialog({
+						title: __("Select Treatment Plan"),
 						fields: [{
 							fieldname: "template",
 							label: __("Treatment Plan"),
@@ -42,23 +42,47 @@ frappe.ui.form.on("Clinical Lead", {
 							options: templates.map((t) => t.name).join("\n"),
 							reqd: 1,
 						}],
-						primary_action_label: __("Calculate Cost"),
+						primary_action_label: __("Show Cost Breakdown"),
 						primary_action(values) {
-							d.hide();
+							dlg.hide();
 							frappe.call({
 								method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_cost",
 								args: { template_name: values.template },
 								callback(r) {
-									frappe.msgprint({
-										title: __("Treatment Plan Cost Breakdown"),
-										message: r.message,
-										indicator: "green",
+									let cost_html = r.message || "<p>No cost data</p>";
+									let cost_dlg = new frappe.ui.Dialog({
+										title: __("Cost Breakdown"),
+										size: "extra-large",
+										fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
+										primary_action_label: __("📤 Share on WhatsApp"),
+										primary_action() {
+											cost_dlg.hide();
+											frappe.call({
+												method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.share_treatment_cost_via_whatsapp",
+												args: {
+													template_name: values.template,
+													mobile_number: frm.doc.mobile_number,
+												},
+												callback(res) {
+													if (res.message && res.message.sent) {
+														frappe.show_alert({
+															message: `✅ Cost estimate (₹${res.message.total.toLocaleString()}) sent to ${res.message.mobile}`,
+															indicator: "green",
+														});
+													} else {
+														frappe.msgprint(__("Failed to send WhatsApp. Please check WhatsApp settings."));
+													}
+												},
+											});
+										},
 									});
+									cost_dlg.fields_dict.cost_html.$wrapper.html(cost_html);
+									cost_dlg.show();
 								},
 							});
 						},
 					});
-					d.show();
+					dlg.show();
 				},
 			});
 		}, __("Treatment Plans"));

@@ -14,7 +14,6 @@ This patch removes the custom field from both possible child table names.
 """
 
 import frappe
-from frappe.custom.doctype.custom_field.custom_field import delete_custom_field
 
 
 def execute():
@@ -22,14 +21,16 @@ def execute():
 
     for doctype in doctype_names:
         if frappe.db.exists("DocType", doctype):
-            try:
-                delete_custom_field(doctype, "plan_rate")
+            custom_field_name = f"{doctype}-plan_rate"
+            if frappe.db.exists("Custom Field", custom_field_name):
+                frappe.delete_doc(
+                    "Custom Field",
+                    custom_field_name,
+                    ignore_permissions=True,
+                    force=True,
+                )
                 frappe.logger("bizaxl_ayurvedic").info(
                     f"v0.7 patch: deleted plan_rate field from {doctype}"
-                )
-            except Exception as e:
-                frappe.logger("bizaxl_ayurvedic").info(
-                    f"v0.7 patch: plan_rate not found on {doctype} ({e})"
                 )
 
     frappe.db.commit()

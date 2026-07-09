@@ -28,6 +28,7 @@ doctype_js = {
     "Patient Appointment": "public/js/patient_appointment.js",
     "Lab Test": "public/js/lab_test.js",
     "Sample Collection": "public/js/sample_collection.js",
+    "Treatment Plan Template": "public/js/treatment_plan_template.js",
 }
 
 # ------------------------------------------------------------------

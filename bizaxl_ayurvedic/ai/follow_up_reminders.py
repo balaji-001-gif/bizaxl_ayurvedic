@@ -52,14 +52,55 @@ def _notify_counsellor(lead):
 
 
 def _check_visit_rows(tf_name):
+    from bizaxl_ayurvedic.integrations.whatsapp import send_text_message
+
     tf = frappe.get_doc("Treatment Follow-Up", tf_name)
+    store_name = frappe.db.get_single_value("Bizaxl Ayurvedic Settings", "store_name") or "Our Clinic"
+
+    # Try to find the assigned practitioner for in-app staff notification
+    practitioner_user = None
+    if tf.consultation:
+        practitioner_user = frappe.db.get_value(
+            "Patient Encounter", tf.consultation, "practitioner"
+        )
+    if practitioner_user and frappe.db.exists("Healthcare Practitioner", practitioner_user):
+        practitioner_user = frappe.db.get_value(
+            "Healthcare Practitioner", practitioner_user, "user_id"
+        )
+    else:
+        practitioner_user = None
+
     for row in tf.follow_up_visits:
-        if row.status == "Pending" and row.next_follow_up_date and getdate(row.next_follow_up_date) <= getdate(today()):
+        if row.status != "Pending" or not row.next_follow_up_date:
+            continue
+        if getdate(row.next_follow_up_date) > getdate(today()):
+            continue
+
+        # ── In-app Notification for staff ──
+        if practitioner_user:
             frappe.get_doc({
                 "doctype": "Notification Log",
-                "subject": f"Patient follow-up due: {tf.patient}",
-                "for_user": frappe.session.user,
+                "subject": f"Follow-up visit due: {tf.patient} — scheduled {row.next_follow_up_date}",
+                "for_user": practitioner_user,
                 "type": "Alert",
                 "document_type": "Treatment Follow-Up",
                 "document_name": tf.name,
             }).insert(ignore_permissions=True)
+
+        # ── WhatsApp reminder to patient ──
+        patient_mobile = frappe.db.get_value("Patient", tf.patient, "mobile")
+        if not patient_mobile:
+            continue
+
+        message = (
+            f"🧘 *{store_name}* — Follow-Up Reminder\n\n"
+            f"Dear {tf.patient},\n\n"
+            f"Your Ayurvedic follow-up visit was scheduled for "
+            f"{row.next_follow_up_date}.\n\n"
+            f"Please visit us at your earliest convenience to continue "
+            f"your treatment journey.\n\n"
+            f"If you have already scheduled or completed this visit, "
+            f"please ignore this message.\n\n"
+            f"*{store_name}*"
+        )
+        send_text_message(patient_mobile, message)

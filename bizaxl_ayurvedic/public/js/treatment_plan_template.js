@@ -37,12 +37,30 @@ function fetchPlanRate(cdt, cdn) {
 	});
 }
 
+function updateTemplateOptions(cdt, cdn) {
+	const row = frappe.get_doc(cdt, cdn);
+	if (!row.item_type) return;
+
+	const cfg = ITEM_CONFIG[row.item_type];
+	if (!cfg) {
+		// Unknown type — clear template
+		frappe.model.set_value(cdt, cdn, "template", null);
+		return;
+	}
+
+	// Update the template Link field to point to the correct master doctype
+	frappe.meta.get_docfield(cdt, "template", row.parent).options = cfg.doctype;
+	// Clear the template value since the target doctype changed
+	frappe.model.set_value(cdt, cdn, "template", null);
+}
+
 ["Treatment Plan Template Item", "Treatment Plan Item"].forEach((dt) => {
 	frappe.ui.form.on(dt, {
 		template(frm, cdt, cdn) {
 			fetchPlanRate(cdt, cdn);
 		},
 		item_type(frm, cdt, cdn) {
+			updateTemplateOptions(cdt, cdn);
 			fetchPlanRate(cdt, cdn);
 		},
 	});

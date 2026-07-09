@@ -92,13 +92,10 @@ function show_cost_dialog(frm, template_name) {
 			const total = data.total || 0;
 			const plan_name = data.template_name || template_name;
 
-			// Helper: safe currency formatting (guards against missing frappe.utils.format_currency)
-			const fmtCurrency = (val) => {
-				if (typeof frappe.utils.format_currency === "function") {
-					return frappe.utils.format_currency(val, "INR");
-				}
-				return "₹" + Number(val || 0).toLocaleString("en-IN");
-			};
+			// Safe currency formatting (guards against missing frappe.utils.format_currency)
+			const fmtCurrency = typeof frappe.utils.format_currency === "function"
+				? (val) => frappe.utils.format_currency(val, "INR")
+				: (val) => "₹" + Number(val || 0).toLocaleString("en-IN");
 
 			let rows = "";
 			details.forEach(d => {
@@ -140,27 +137,18 @@ function show_cost_dialog(frm, template_name) {
 			</div>
 			`;
 
-			try {
-				let cost_dlg = new frappe.ui.Dialog({
-					title: `📋 ${plan_name}`,
-					size: "large",
-					fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
-					primary_action_label: __("📤 Share on WhatsApp"),
-					primary_action() {
-						cost_dlg.hide();
-						share_cost_via_whatsapp(frm, template_name);
-					},
-				});
-				cost_dlg.fields_dict.cost_html.$wrapper.html(html);
-				cost_dlg.show();
-			} catch (e) {
-				console.error("cost_dialog error:", e);
-				frappe.msgprint({
-					title: __("Dialog Error"),
-					message: e.message,
-					indicator: "red",
-				});
-			}
+			let cost_dlg = new frappe.ui.Dialog({
+				title: `📋 ${plan_name}`,
+				size: "large",
+				fields: [{ fieldtype: "HTML", fieldname: "cost_html" }],
+				primary_action_label: __("📤 Share on WhatsApp"),
+				primary_action() {
+					cost_dlg.hide();
+					share_cost_via_whatsapp(frm, template_name);
+				},
+			});
+			cost_dlg.fields_dict.cost_html.$wrapper.html(html);
+			cost_dlg.show();
 		},
 		error(xhr) {
 			const resp = xhr.responseJSON || {};

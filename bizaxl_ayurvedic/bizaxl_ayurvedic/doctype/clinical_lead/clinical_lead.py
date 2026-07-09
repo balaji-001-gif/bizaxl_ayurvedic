@@ -60,10 +60,12 @@ def get_treatment_plan_cost(template_name):
 
     rows_html = ""
     for d in details:
+        item_name = frappe.utils.escape_html(str(d.get("name") or ""))
+        item_type = frappe.utils.escape_html(str(d.get("type") or ""))
         rows_html += (
             "<tr>"
-            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{frappe.utils.escape_html(str(d['name'] or ""))}</td>"
-            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{frappe.utils.escape_html(str(d['type'] or ""))}</td>"
+            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{item_name}</td>"
+            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{item_type}</td>"
             f"<td style='padding:12px;text-align:center;border-bottom:1px solid #e2e8f0;'>{d['qty']}</td>"
             f"<td style='padding:12px;text-align:right;border-bottom:1px solid #e2e8f0;'>{frappe.utils.fmt_money(d['rate'])}</td>"
             f"<td style='padding:12px;text-align:right;border-bottom:1px solid #e2e8f0;'>{frappe.utils.fmt_money(d['amount'])}</td>"

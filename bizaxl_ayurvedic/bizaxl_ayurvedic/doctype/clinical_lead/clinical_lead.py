@@ -4,6 +4,16 @@
 import frappe
 from frappe.model.document import Document
 
+# ── Master type → doctype / rate-field mapping (shared across helpers) ──
+ITEM_TYPE_CONFIG = {
+    "Clinical Procedure Template": {"doctype": "Clinical Procedure Template", "rate_fields": ["rate", "price"]},
+    "Clinical Procedure": {"doctype": "Clinical Procedure Template", "rate_fields": ["rate", "price"]},
+    "Lab Test Template": {"doctype": "Lab Test Template", "rate_fields": ["lab_test_rate", "rate", "price"]},
+    "Lab Test": {"doctype": "Lab Test Template", "rate_fields": ["lab_test_rate", "rate", "price"]},
+    "Therapy Type": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
+    "Therapy": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
+}
+
 
 class ClinicalLead(Document):
     def before_insert(self):
@@ -93,17 +103,37 @@ def share_treatment_cost_via_whatsapp(template_name, mobile_number):
     return {"sent": bool(result), "total": cost_result["total"], "mobile": mobile_number}
 
 
+def populate_plan_rates_from_masters(doc, method=None):
+    """DocType Event: Treatment Plan Template -> validate.
+
+    Auto-populates the `plan_rate` field on each item row from the
+    linked master doctype (Therapy Type, Clinical Procedure Template,
+    Lab Test Template) so the rate is visible in the grid and can be
+    customised per item without looking up the master each time.
+    """
+    for item in getattr(doc, "items", []):
+        # Only auto-populate if plan_rate is not already set manually
+        if getattr(item, "plan_rate", None):
+            continue
+        item_type = getattr(item, "item_type", None)
+        item_template = getattr(item, "template", None)
+        if not item_type or not item_template:
+            continue
+        config = ITEM_TYPE_CONFIG.get(item_type)
+        if not config:
+            continue
+        master = frappe.db.get_value(
+            config["doctype"], item_template, config["rate_fields"], as_dict=True
+        )
+        if master:
+            for f in config["rate_fields"]:
+                if master.get(f):
+                    item.plan_rate = master.get(f)
+                    break
+
+
 def _compute_cost_breakdown(template):
     """Shared helper — returns a dict with 'details' list and 'total'."""
-    item_type_config = {
-        "Clinical Procedure Template": {"doctype": "Clinical Procedure Template", "rate_fields": ["rate", "price"]},
-        "Clinical Procedure": {"doctype": "Clinical Procedure Template", "rate_fields": ["rate", "price"]},
-        "Lab Test Template": {"doctype": "Lab Test Template", "rate_fields": ["lab_test_rate", "rate", "price"]},
-        "Lab Test": {"doctype": "Lab Test Template", "rate_fields": ["lab_test_rate", "rate", "price"]},
-        "Therapy Type": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
-        "Therapy": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
-    }
-
     details = []
     total = 0
 
@@ -115,7 +145,7 @@ def _compute_cost_breakdown(template):
         # then fall back to master doctype
         rate = getattr(item, "plan_rate", None) or getattr(item, "rate", None) or 0
         if not rate:
-            config = item_type_config.get(item_type)
+            config = ITEM_TYPE_CONFIG.get(item_type)
             if config and item_template:
                 master = frappe.db.get_value(config["doctype"], item_template, config["rate_fields"], as_dict=True)
                 if master:

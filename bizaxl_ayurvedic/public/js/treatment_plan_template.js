@@ -20,14 +20,25 @@ const ITEM_CONFIG = {
 	"Lab Test":                  { doctype: "Lab Test Template" },
 };
 
-// The Link field may be "template" or "item_code" depending on Frappe Health version
-const ITEM_LINK_FIELDS = ["template", "item_code"];
+// The child table may use different field names depending on the Frappe
+// Healthcare version. The type field can be "item_type" or "service_type".
+// The Link field can be "template", "service", or "item_code".
+const ITEM_TYPE_FIELDS = ["item_type", "service_type"];
+const ITEM_LINK_FIELDS = ["template", "service", "item_code"];
+
+function getType(row) {
+	for (const f of ITEM_TYPE_FIELDS) {
+		if (row[f]) return row[f];
+	}
+	return null;
+}
 
 function updateItemOptions(cdt, cdn) {
 	const row = frappe.get_doc(cdt, cdn);
-	if (!row.item_type) return;
+	const itemType = getType(row);
+	if (!itemType) return;
 
-	const cfg = ITEM_CONFIG[row.item_type];
+	const cfg = ITEM_CONFIG[itemType];
 	if (!cfg) {
 		// Unknown type — clear all link fields
 		for (const f of ITEM_LINK_FIELDS) {
@@ -44,13 +55,15 @@ function updateItemOptions(cdt, cdn) {
 	}
 }
 
-// Register handlers for each possible child table doctype
+// Register handlers for each possible child table doctype AND each possible type field name
 ["Treatment Plan Template Item", "Treatment Plan Item"].forEach((dt) => {
-	frappe.ui.form.on(dt, {
-		item_type(frm, cdt, cdn) {
+	const events = {};
+	ITEM_TYPE_FIELDS.forEach((fieldName) => {
+		events[fieldName] = function(frm, cdt, cdn) {
 			updateItemOptions(cdt, cdn);
-		},
+		};
 	});
+	frappe.ui.form.on(dt, events);
 });
 
 // ── Drug row: auto-fetch rate from Item master into rate ──

@@ -14,9 +14,22 @@ ITEM_TYPE_CONFIG = {
     "Therapy": {"doctype": "Therapy Type", "rate_fields": ["rate", "price"]},
 }
 
-# The Link field on Treatment Plan Template Item child table may be named
-# "template" or "item_code" depending on the Frappe Healthcare version.
-ITEM_LINK_FIELDS = ["template", "item_code"]
+# The Treatment Plan Template Item child table may use different field
+# names depending on the Frappe Healthcare version:
+#   - item_type / template (older Frappe Health)
+#   - service_type / service (newer Frappe Health)
+#   - item_code (some ERPNext Healthcare versions)
+ITEM_TYPE_FIELDS = ["item_type", "service_type"]
+ITEM_LINK_FIELDS = ["template", "service", "item_code"]
+
+
+def _get_item_type(item):
+    """Try all possible type field names."""
+    for f in ITEM_TYPE_FIELDS:
+        val = getattr(item, f, None)
+        if val:
+            return val
+    return None
 
 
 def _get_item_code(item):
@@ -179,7 +192,7 @@ def _compute_cost_breakdown(template):
     total = 0
 
     for item in getattr(template, "items", []):
-        item_type = getattr(item, "item_type", None)
+        item_type = _get_item_type(item)
         item_code = _get_item_code(item)
         qty = getattr(item, "qty", 1) or 1
         # Fetch rate directly from master doctype (Therapy Type, Clinical

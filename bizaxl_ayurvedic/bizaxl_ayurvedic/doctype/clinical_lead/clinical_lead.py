@@ -45,13 +45,20 @@ def get_treatment_plan_cost(template_name):
     """Returns structured cost breakdown for a Treatment Plan Template.
     Returns JSON with details list, total, and template_name so the
     client can render a professional dialog (see clinical_lead.js)."""
-    template = frappe.get_doc("Treatment Plan Template", template_name)
-    result = _compute_cost_breakdown(template)
-    return {
-        "template_name": template.template_name,
-        "details": result["details"],
-        "total": result["total"],
-    }
+    try:
+        template = frappe.get_doc("Treatment Plan Template", template_name)
+        result = _compute_cost_breakdown(template)
+        return {
+            "template_name": template.template_name,
+            "details": result["details"],
+            "total": result["total"],
+        }
+    except Exception as e:
+        frappe.log_error(
+            title="Treatment Plan Cost Error",
+            message=f"Template: {template_name}\nError: {e}"
+        )
+        frappe.throw(f"Could not compute cost for '{template_name}': {e}")
 
 
 @frappe.whitelist()

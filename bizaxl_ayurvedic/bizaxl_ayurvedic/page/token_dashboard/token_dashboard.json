@@ -3,6 +3,9 @@
  "name": "Token Dashboard",
  "icon": "fa fa-hashtag",
  "route": "token-dashboard",
- "roles": ["System Manager", "Healthcare Practitioner"],
+ "roles": [
+ {"role": "System Manager"},
+ {"role": "Healthcare Practitioner"}
+ ],
  "module": "Bizaxl Ayurvedic"
 }

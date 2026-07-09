@@ -42,26 +42,16 @@ def get_treatment_plan_templates():
 
 @frappe.whitelist()
 def get_treatment_plan_cost(template_name):
-    """Builds an HTML cost breakdown for a Treatment Plan Template, combining
-    procedure/therapy/lab-test rate lookups with child-table drug rates.
-    Ported from the client's original 'Show treatment cost' Client Script."""
+    """Returns structured cost breakdown for a Treatment Plan Template.
+    Returns JSON with details list, total, and template_name so the
+    client can render a professional dialog (see clinical_lead.js)."""
     template = frappe.get_doc("Treatment Plan Template", template_name)
     result = _compute_cost_breakdown(template)
-    details, total = result["details"], result["total"]
-
-    rows_html = "".join(
-        f"<tr><td>{d['name']}</td><td>{d['type']}</td><td>{d['qty']}</td>"
-        f"<td>{frappe.utils.fmt_money(d['rate'])}</td><td>{frappe.utils.fmt_money(d['amount'])}</td></tr>"
-        for d in details
-    ) or "<tr><td colspan='5'>No billable items found</td></tr>"
-
-    return (
-        f"<h4>{frappe.utils.escape_html(template.template_name)}</h4>"
-        "<table class='table table-bordered'><thead><tr>"
-        "<th>Item</th><th>Type</th><th>Qty</th><th>Unit Rate</th><th>Amount</th>"
-        f"</tr></thead><tbody>{rows_html}</tbody>"
-        f"<tfoot><tr><th colspan='4'>Total</th><th>{frappe.utils.fmt_money(total)}</th></tr></tfoot></table>"
-    )
+    return {
+        "template_name": template.template_name,
+        "details": result["details"],
+        "total": result["total"],
+    }
 
 
 @frappe.whitelist()
@@ -158,7 +148,14 @@ def _compute_cost_breakdown(template):
         details.append({"name": item_template, "type": item_type, "qty": qty, "rate": rate, "amount": amount})
 
     for drug in getattr(template, "drugs", []):
-        rate = getattr(drug, "rate", 0) or 0
+        # Try multiple rate fields (matching client-side logic)
+        drug_rate_fields = ["rate", "price", "unit_price", "amount", "unit_rate", "selling_price"]
+        rate = 0
+        for f in drug_rate_fields:
+            val = getattr(drug, f, None)
+            if val:
+                rate = val
+                break
         qty = getattr(drug, "quantity", 1) or 1
         amount = rate * qty
         total += amount

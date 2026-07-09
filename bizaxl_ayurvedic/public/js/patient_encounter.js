@@ -110,10 +110,55 @@ function show_cost_dialog(frm, template_name) {
 		method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.get_treatment_plan_cost",
 		args: { template_name },
 		callback(r) {
-			let cost_html = r.message || "<p>No cost data</p>";
+			if (!r.message) {
+				frappe.msgprint(__("No cost data available."));
+				return;
+			}
+			const data = r.message;
+			const details = data.details || [];
+			const total = data.total || 0;
+			const plan_name = data.template_name || template_name;
 
-			// Build plan name and total from the HTML
-			let plan_name = template_name;
+			let rows = "";
+			details.forEach(d => {
+				rows += `<tr>
+					<td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${d.name}</td>
+					<td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">${d.type}</td>
+					<td style="padding: 12px; text-align: center; border-bottom: 1px solid #e2e8f0;">${d.qty}</td>
+					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${frappe.utils.format_currency(d.rate, "INR")}</td>
+					<td style="padding: 12px; text-align: right; border-bottom: 1px solid #e2e8f0;">${frappe.utils.format_currency(d.amount, "INR")}</td>
+				</tr>`;
+			});
+
+			let html = `
+			<div style="max-height: 450px; overflow-y: auto; font-family: 'Inter', system-ui;">
+				<div style="padding: 15px 0 5px 0;">
+					<h3 style="margin: 0 0 5px 0; color: #003960; font-weight: 600;">Treatment Plan Cost Summary</h3>
+					<p style="color: #2c5f5f; font-size: 13px; margin-bottom: 15px;">${plan_name}</p>
+				</div>
+				<table style="width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid #e2e8f0;">
+					<thead>
+						<tr style="background-color: #003960; color: white;">
+							<th style="padding: 12px; text-align: left;">Item</th>
+							<th style="padding: 12px; text-align: left;">Type</th>
+							<th style="padding: 12px; text-align: center;">Qty</th>
+							<th style="padding: 12px; text-align: right;">Unit Rate (₹)</th>
+							<th style="padding: 12px; text-align: right;">Amount (₹)</th>
+						</tr>
+					</thead>
+					<tbody>
+						${rows || '<tr><td colspan="5" style="text-align:center; padding:30px;">No billable items found</td></tr>'}
+					</tbody>
+					<tfoot>
+						<tr style="background-color: #f0fdf4; border-top: 2px solid #00f2b4;">
+							<td colspan="4" style="padding: 12px; text-align: right; font-weight: 700; font-size: 14px;">Total</td>
+							<td style="padding: 12px; text-align: right; font-weight: 700; font-size: 14px; color: #003960;">${frappe.utils.format_currency(total, "INR")}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			`;
+
 			let cost_dlg = new frappe.ui.Dialog({
 				title: `📋 ${plan_name}`,
 				size: "extra-large",
@@ -124,7 +169,7 @@ function show_cost_dialog(frm, template_name) {
 					share_cost_via_whatsapp(frm, template_name);
 				},
 			});
-			cost_dlg.fields_dict.cost_html.$wrapper.html(cost_html);
+			cost_dlg.fields_dict.cost_html.$wrapper.html(html);
 			cost_dlg.show();
 		},
 	});

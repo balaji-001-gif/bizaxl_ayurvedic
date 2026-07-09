@@ -47,3 +47,25 @@ function fetchPlanRate(cdt, cdn) {
 		},
 	});
 });
+
+// ── Drug row: auto-fetch rate from Item master into rate ──
+// The Drugs child table in Treatment Plan Template uses the standard
+// "Drug Prescription" child table (same one used in Patient Encounter).
+// When a user selects a drug_code, this handler fetches the Item's
+// standard_rate and populates the rate field.
+
+function fetchDrugRate(cdt, cdn) {
+	const row = frappe.get_doc(cdt, cdn);
+	if (!row.drug_code) return;
+
+	frappe.db.get_value("Item", row.drug_code, "standard_rate", (r) => {
+		const rate = r ? r.standard_rate : 0;
+		frappe.model.set_value(cdt, cdn, "rate", rate || 0);
+	});
+}
+
+frappe.ui.form.on("Drug Prescription", {
+	drug_code(frm, cdt, cdn) {
+		fetchDrugRate(cdt, cdn);
+	},
+});

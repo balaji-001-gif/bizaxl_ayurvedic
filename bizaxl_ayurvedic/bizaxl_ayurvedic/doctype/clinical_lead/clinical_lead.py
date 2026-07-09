@@ -42,23 +42,63 @@ def get_treatment_plan_templates():
 
 @frappe.whitelist()
 def get_treatment_plan_cost(template_name):
-    """Returns structured cost breakdown for a Treatment Plan Template.
-    Returns JSON with details list, total, and template_name so the
-    client can render a professional dialog (see clinical_lead.js)."""
+    """Returns pre-rendered HTML cost breakdown for a Treatment Plan Template.
+    The client displays this HTML directly in a dialog — no JSON parsing needed."""
     try:
         template = frappe.get_doc("Treatment Plan Template", template_name)
         result = _compute_cost_breakdown(template)
-        return {
-            "template_name": template.template_name,
-            "details": result["details"],
-            "total": result["total"],
-        }
+        details, total = result["details"], result["total"]
     except Exception as e:
         frappe.log_error(
             title="Treatment Plan Cost Error",
             message=f"Template: {template_name}\nError: {e}"
         )
         frappe.throw(f"Could not compute cost for '{template_name}': {e}")
+
+    # Build professional HTML (matching the client-side design from the original script)
+    plan_name = frappe.utils.escape_html(template.template_name)
+
+    rows_html = ""
+    for d in details:
+        rows_html += (
+            "<tr>"
+            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{frappe.utils.escape_html(str(d['name'] or ""))}</td>"
+            f"<td style='padding:12px;border-bottom:1px solid #e2e8f0;'>{frappe.utils.escape_html(str(d['type'] or ""))}</td>"
+            f"<td style='padding:12px;text-align:center;border-bottom:1px solid #e2e8f0;'>{d['qty']}</td>"
+            f"<td style='padding:12px;text-align:right;border-bottom:1px solid #e2e8f0;'>{frappe.utils.fmt_money(d['rate'])}</td>"
+            f"<td style='padding:12px;text-align:right;border-bottom:1px solid #e2e8f0;'>{frappe.utils.fmt_money(d['amount'])}</td>"
+            "</tr>"
+        )
+
+    if not rows_html:
+        rows_html = "<tr><td colspan='5' style='text-align:center;padding:30px;'>No billable items found</td></tr>"
+
+    return (
+        "<div style='max-height:450px;overflow-y:auto;font-family:Inter,system-ui;'>"
+        "<div style='padding:15px 0 5px 0;'>"
+        f"<h3 style='margin:0 0 5px 0;color:#003960;font-weight:600;'>Treatment Plan Cost Summary</h3>"
+        f"<p style='color:#2c5f5f;font-size:13px;margin-bottom:15px;'>{plan_name}</p>"
+        "</div>"
+        "<table style='width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;'>"
+        "<thead>"
+        "<tr style='background-color:#003960;color:white;'>"
+        "<th style='padding:12px;text-align:left;'>Item</th>"
+        "<th style='padding:12px;text-align:left;'>Type</th>"
+        "<th style='padding:12px;text-align:center;'>Qty</th>"
+        "<th style='padding:12px;text-align:right;'>Unit Rate</th>"
+        "<th style='padding:12px;text-align:right;'>Amount</th>"
+        "</tr>"
+        "</thead>"
+        f"<tbody>{rows_html}</tbody>"
+        "<tfoot>"
+        f"<tr style='background-color:#f0fdf4;border-top:2px solid #00f2b4;'>"
+        "<td colspan='4' style='padding:12px;text-align:right;font-weight:700;font-size:14px;'>Total</td>"
+        f"<td style='padding:12px;text-align:right;font-weight:700;font-size:14px;color:#003960;'>{frappe.utils.fmt_money(total)}</td>"
+        "</tr>"
+        "</tfoot>"
+        "</table>"
+        "</div>"
+    )
 
 
 @frappe.whitelist()

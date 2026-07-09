@@ -111,15 +111,17 @@ def _compute_cost_breakdown(template):
         item_type = getattr(item, "item_type", None)
         item_template = getattr(item, "template", None)
         qty = getattr(item, "qty", 1) or 1
-        config = item_type_config.get(item_type)
-        rate = 0
-        if config and item_template:
-            master = frappe.db.get_value(config["doctype"], item_template, config["rate_fields"], as_dict=True)
-            if master:
-                for f in config["rate_fields"]:
-                    if master.get(f):
-                        rate = master.get(f)
-                        break
+        # Prefer the rate set directly on the item row; fall back to master doctype
+        rate = getattr(item, "rate", None) or 0
+        if not rate:
+            config = item_type_config.get(item_type)
+            if config and item_template:
+                master = frappe.db.get_value(config["doctype"], item_template, config["rate_fields"], as_dict=True)
+                if master:
+                    for f in config["rate_fields"]:
+                        if master.get(f):
+                            rate = master.get(f)
+                            break
         amount = rate * qty
         total += amount
         details.append({"name": item_template, "type": item_type, "qty": qty, "rate": rate, "amount": amount})

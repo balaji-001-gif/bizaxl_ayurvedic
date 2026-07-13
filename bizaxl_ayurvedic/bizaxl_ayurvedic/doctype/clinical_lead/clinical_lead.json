@@ -100,13 +100,6 @@
    "label": "Treatment Interest"
   },
   {
-   "fieldname": "interested_treatment_options",
-   "label": "Interested Treatment Options",
-   "fieldtype": "Select",
-   "options": "\nSkin Whitening\nLaser Therapy\nHydrafacial\nPRP Hair\nAcne Treatment\nPigmentation Treatment\nAnti Aging\nHair Treatment\nChemical Peel",
-   "reqd": 1
-  },
-  {
    "fieldname": "treatment_plan_template",
    "label": "Treatment Plan Template",
    "fieldtype": "Link",

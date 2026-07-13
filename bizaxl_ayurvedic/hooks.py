@@ -30,6 +30,7 @@ doctype_js = {
     "Sample Collection": "public/js/sample_collection.js",
     "Treatment Plan Template": "public/js/treatment_plan_template.js",
     "Patient Assessment": "public/js/patient_assessment.js",
+    "Therapy Session": "public/js/therapy_session.js",
 }
 
 # ------------------------------------------------------------------

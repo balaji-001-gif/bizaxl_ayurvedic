@@ -7,3 +7,4 @@ bizaxl_ayurvedic.patches.v0_6.add_plan_rate_field
 bizaxl_ayurvedic.patches.v0_7.remove_plan_rate_field
 bizaxl_ayurvedic.patches.v0_8.add_patient_and_assessment_photo_fields
 bizaxl_ayurvedic.patches.v0_9.add_token_number_field
+bizaxl_ayurvedic.patches.v0_10.add_exercise_steps_field

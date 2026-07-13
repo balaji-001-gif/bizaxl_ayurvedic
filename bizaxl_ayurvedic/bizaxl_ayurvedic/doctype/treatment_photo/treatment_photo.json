@@ -23,7 +23,8 @@
    "label": "Photo",
    "fieldtype": "Attach Image",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "photo_type",
@@ -31,24 +32,28 @@
    "fieldtype": "Select",
    "options": "Before\nAfter",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "treatment_date",
    "label": "Treatment Date",
    "fieldtype": "Date",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "angle",
    "label": "Angle / View",
-   "fieldtype": "Data"
+   "fieldtype": "Data",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "annotation",
    "label": "Annotation",
-   "fieldtype": "Small Text"
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
   }
  ],
  "permissions": [],

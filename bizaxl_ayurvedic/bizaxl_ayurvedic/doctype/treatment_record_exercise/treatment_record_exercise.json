@@ -15,7 +15,7 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "engine": "InnoDB",
- "description": "Read-only snapshot of exercises from the linked Therapy Session, shown on Treatment Record.",
+ "description": "Exercise snapshot shown on Treatment Record — editable after submit so staff can track progress.",
  "fields": [
   {
    "fieldname": "exercise_type",
@@ -23,35 +23,35 @@
    "fieldtype": "Link",
    "options": "Exercise Type",
    "in_list_view": 1,
-   "read_only": 1
+   "allow_on_submit": 1
   },
   {
    "fieldname": "difficulty_level",
    "label": "Difficulty Level",
    "fieldtype": "Link",
    "options": "Exercise Difficulty Level",
-   "read_only": 1
+   "allow_on_submit": 1
   },
   {
    "fieldname": "counts_target",
    "label": "Counts Target",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "read_only": 1
+   "allow_on_submit": 1
   },
   {
    "fieldname": "counts_completed",
    "label": "Counts Completed",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "read_only": 1
+   "allow_on_submit": 1
   },
   {
    "fieldname": "assistance_level",
    "label": "Assistance Level",
    "fieldtype": "Select",
    "options": "\nPassive\nActive Assist\nActive",
-   "read_only": 1
+   "allow_on_submit": 1
   }
  ],
  "permissions": [],

@@ -10,8 +10,8 @@ frappe.ui.form.on("Clinical Lead", {
 				frm.add_custom_button(__("View Patient"), () => {
 					frappe.set_route("Form", "Patient", frm.doc.patient);
 				});
-			} else if (frm.doc.lead_status !== "Converted") {
-				// Lead not yet converted & no patient — show Create button
+			} else if (frm.doc.lead_status === "Converted") {
+				// Lead manually set to Converted but no patient linked yet — show Create button
 				frm.add_custom_button(__("Create Patient"), () => {
 					frappe.new_doc("Patient", {
 						patient_name: frm.doc.lead_name,

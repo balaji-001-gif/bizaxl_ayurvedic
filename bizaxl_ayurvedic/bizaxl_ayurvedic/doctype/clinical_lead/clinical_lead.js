@@ -10,34 +10,15 @@ frappe.ui.form.on("Clinical Lead", {
 				frm.add_custom_button(__("View Patient"), () => {
 					frappe.set_route("Form", "Patient", frm.doc.patient);
 				});
-			} else {
-				// No patient yet — show Create button
+			} else if (frm.doc.lead_status !== "Converted") {
+				// Lead not yet converted & no patient — show Create button
 				frm.add_custom_button(__("Create Patient"), () => {
-					frappe.confirm(
-						__("Create a Patient from this Lead with the name <b>{0}</b>?", [frm.doc.lead_name]),
-						() => {
-							frappe.call({
-								method: "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.create_patient_from_lead",
-								args: { lead_name: frm.doc.name },
-								callback(r) {
-									if (r.message) {
-										frappe.show_alert({
-											message: __("Patient {0} created successfully!", [r.message.patient_name]),
-											indicator: "green",
-										});
-										frm.reload_doc();
-									}
-								},
-								error(r) {
-									frappe.msgprint({
-										title: __("Error"),
-										message: r.message || __("Failed to create patient. Please try again."),
-										indicator: "red",
-									});
-								},
-							});
-						}
-					);
+					frappe.new_doc("Patient", {
+						patient_name: frm.doc.lead_name,
+						mobile: frm.doc.mobile_number,
+						sex: frm.doc.gender,
+						email: frm.doc.email,
+					});
 				});
 			}
 		}

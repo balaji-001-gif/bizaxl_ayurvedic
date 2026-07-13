@@ -57,44 +57,6 @@ class ClinicalLead(Document):
 # ------------------------------------------------------------------
 
 @frappe.whitelist()
-def create_patient_from_lead(lead_name):
-    """Create a Patient record from a Clinical Lead and return the patient name.
-    Called from clinical_lead.js when the user clicks "Create Patient"."""
-    lead = frappe.get_doc("Clinical Lead", lead_name)
-
-    if lead.patient:
-        frappe.throw(
-            frappe._("Patient {0} is already linked to this Lead.").format(lead.patient)
-        )
-
-    patient = frappe.new_doc("Patient")
-    patient.patient_name = lead.lead_name
-    patient.mobile = lead.mobile_number
-    patient.sex = lead.gender
-    if lead.email:
-        patient.email = lead.email
-    if lead.age:
-        # Convert age to approximate date_of_birth (Patient's age is read-only computed)
-        from datetime import date
-        from dateutil.relativedelta import relativedelta
-        patient.dob = (date.today() - relativedelta(years=lead.age)).isoformat()
-    patient.flags.ignore_permissions = True
-    patient.flags.ignore_mandatory = True  # skip fields not available from lead
-    patient.insert()
-
-    # Link the new Patient back to the Clinical Lead
-    frappe.db.set_value("Clinical Lead", lead_name, "patient", patient.name)
-
-    # Mark lead as Converted
-    frappe.db.set_value("Clinical Lead", lead_name, "lead_status", "Converted")
-
-    return {
-        "patient_name": patient.name,
-        "lead_status": "Converted",
-    }
-
-
-@frappe.whitelist()
 def get_treatment_plan_templates():
     return frappe.get_list(
         "Treatment Plan Template",

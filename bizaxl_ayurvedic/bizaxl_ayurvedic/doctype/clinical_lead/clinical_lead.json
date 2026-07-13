@@ -172,7 +172,7 @@
    "label": "Patient",
    "fieldtype": "Link",
    "options": "Patient",
-   "read_only": 1,
+   "read_only": 0,
    "no_copy": 1
   },
   {

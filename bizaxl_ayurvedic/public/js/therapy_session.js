@@ -13,7 +13,7 @@ frappe.ui.form.on("Therapy Session", {
 	},
 });
 
-frappe.ui.form.on("Therapy Session Exercise", {
+frappe.ui.form.on("Exercise", {
 	exercise_type(frm, cdt, cdn) {
 		let row = frappe.get_doc(cdt, cdn);
 		if (!row.exercise_type) {
@@ -59,9 +59,9 @@ function fetch_all_exercise_steps(frm) {
 				},
 				callback(r) {
 					if (r.message && r.message.exercise_steps && row.name) {
-						frappe.model.set_value(
-							"Therapy Session Exercise",
-							row.name,
+					frappe.model.set_value(
+						"Exercise",
+						row.name,
 							"exercise_steps",
 							r.message.exercise_steps
 						);

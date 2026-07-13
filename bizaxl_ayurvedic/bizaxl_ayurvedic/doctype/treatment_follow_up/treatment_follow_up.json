@@ -93,7 +93,8 @@
    "fieldname": "follow_up_visits",
    "label": "Follow Up Visits",
    "fieldtype": "Table",
-   "options": "Follow-up Visits"
+   "options": "Follow-up Visits",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "amended_from",

@@ -22,6 +22,7 @@
    "fieldname": "follow_up_days",
    "label": "Follow Up Days",
    "fieldtype": "Data",
+   "allow_on_submit": 1,
    "in_list_view": 1
   },
   {
@@ -29,18 +30,21 @@
    "label": "Follow Up Type",
    "fieldtype": "Select",
    "options": "\nWeekly\nMonthly\nQuarterly\nHalf Yearly\nYearly\nCustom",
+   "allow_on_submit": 1,
    "in_list_view": 1
   },
   {
    "fieldname": "visit_date",
    "label": "Visit Date",
    "fieldtype": "Date",
+   "allow_on_submit": 1,
    "in_list_view": 1
   },
   {
    "fieldname": "next_follow_up_date",
    "label": "Next Follow Up Date",
    "fieldtype": "Date",
+   "allow_on_submit": 1,
    "in_list_view": 1
   },
   {
@@ -48,13 +52,15 @@
    "label": "Status",
    "fieldtype": "Select",
    "options": "\nPending\nCompleted\nMissed",
+   "allow_on_submit": 1,
    "in_list_view": 1,
    "default": "Pending"
   },
   {
    "fieldname": "notes",
    "label": "Notes",
-   "fieldtype": "Small Text"
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
   }
  ],
  "permissions": [],

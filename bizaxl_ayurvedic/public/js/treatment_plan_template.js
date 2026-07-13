@@ -55,12 +55,67 @@ function updateItemOptions(cdt, cdn) {
 	}
 }
 
-// Register handlers for each possible child table doctype AND each possible type field name
+// ── Plan items: auto-fetch rate from master doctype ──
+
+const ITEM_RATE_CONFIG = {
+	"Therapy Type":              { doctype: "Therapy Type", rate_fields: ["rate", "price"] },
+	"Therapy":                   { doctype: "Therapy Type", rate_fields: ["rate", "price"] },
+	"Clinical Procedure Template": { doctype: "Clinical Procedure Template", rate_fields: ["rate", "price"] },
+	"Clinical Procedure":        { doctype: "Clinical Procedure Template", rate_fields: ["rate", "price"] },
+	"Lab Test Template":         { doctype: "Lab Test Template", rate_fields: ["lab_test_rate", "rate", "price"] },
+	"Lab Test":                  { doctype: "Lab Test Template", rate_fields: ["lab_test_rate", "rate", "price"] },
+};
+
+function fetchItemRate(cdt, cdn) {
+	const row = frappe.get_doc(cdt, cdn);
+	const itemType = getType(row);
+	const itemCode = getItemCode(row);
+	if (!itemType || !itemCode) return;
+
+	const cfg = ITEM_RATE_CONFIG[itemType];
+	if (!cfg) return;
+
+	frappe.call({
+		method: "frappe.client.get_value",
+		args: {
+			doctype: cfg.doctype,
+			filters: { name: itemCode },
+			fieldname: cfg.rate_fields.join(","),
+		},
+		callback(r) {
+			if (r.message) {
+				let rate = 0;
+				for (const f of cfg.rate_fields) {
+					if (r.message[f]) {
+						rate = r.message[f];
+						break;
+					}
+				}
+				frappe.model.set_value(cdt, cdn, "rate", rate);
+			}
+		},
+	});
+}
+
+function getItemCode(row) {
+	for (const f of ITEM_LINK_FIELDS) {
+		if (row[f]) return row[f];
+	}
+	return null;
+}
+
+// Register handlers for each possible child table doctype AND each possible type/link field name
 ["Treatment Plan Template Item", "Treatment Plan Item"].forEach((dt) => {
 	const events = {};
 	ITEM_TYPE_FIELDS.forEach((fieldName) => {
 		events[fieldName] = function(frm, cdt, cdn) {
 			updateItemOptions(cdt, cdn);
+			fetchItemRate(cdt, cdn);
+		};
+	});
+	ITEM_LINK_FIELDS.forEach((fieldName) => {
+		events[fieldName] = function(frm, cdt, cdn) {
+			fetchItemRate(cdt, cdn);
 		};
 	});
 	frappe.ui.form.on(dt, events);

@@ -173,9 +173,11 @@ def populate_drug_rates_from_master(doc, method=None):
 
     Auto-populates the `rate` field on each drug row from the Item
     master's standard_rate, with a guard to preserve manually
-    entered rates. Item plan rates are now always fetched live from
-    the master doctype during cost breakdown (see _compute_cost_breakdown).
+    entered rates. Also populates plan item rates from their
+    respective master doctypes (Therapy Type, Clinical Procedure
+    Template, Lab Test Template).
     """
+    # Populate drug rates from Item master
     for drug in getattr(doc, "drugs", []):
         if getattr(drug, "rate", None):
             continue  # Preserve manually entered rate
@@ -184,6 +186,22 @@ def populate_drug_rates_from_master(doc, method=None):
         standard_rate = frappe.db.get_value("Item", drug.drug_code, "standard_rate")
         if standard_rate:
             drug.rate = standard_rate
+
+    # Populate plan item rates from their respective master doctypes
+    for item in getattr(doc, "items", []):
+        if getattr(item, "rate", None):
+            continue  # Preserve manually entered rate
+        item_type = _get_item_type(item)
+        item_code = _get_item_code(item)
+        config = ITEM_TYPE_CONFIG.get(item_type)
+        if not config or not item_code:
+            continue
+        master = frappe.db.get_value(config["doctype"], item_code, config["rate_fields"], as_dict=True)
+        if master:
+            for f in config["rate_fields"]:
+                if master.get(f):
+                    item.rate = master.get(f)
+                    break
 
 
 def _compute_cost_breakdown(template):

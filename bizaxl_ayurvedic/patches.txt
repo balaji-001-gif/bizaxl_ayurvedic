@@ -9,3 +9,4 @@ bizaxl_ayurvedic.patches.v0_8.add_patient_and_assessment_photo_fields
 bizaxl_ayurvedic.patches.v0_9.add_token_number_field
 bizaxl_ayurvedic.patches.v0_10.add_exercise_steps_field
 bizaxl_ayurvedic.patches.v0_11.add_exercise_steps_to_therapy_session_exercise
+bizaxl_ayurvedic.patches.v0_12.add_rate_fields_to_treatment_plan_items

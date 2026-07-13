@@ -86,6 +86,7 @@
    "fieldtype": "Select",
    "options": "\nWaiting\nIn Consultation\nCompleted\nCalled",
    "default": "Waiting",
+   "allow_on_submit": 1,
    "in_list_view": 1
   },
   {

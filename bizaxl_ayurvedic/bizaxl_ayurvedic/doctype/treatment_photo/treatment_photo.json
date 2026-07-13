@@ -37,6 +37,7 @@
    "fieldname": "treatment_date",
    "label": "Treatment Date",
    "fieldtype": "Date",
+   "reqd": 1,
    "in_list_view": 1
   },
   {

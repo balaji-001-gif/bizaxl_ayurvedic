@@ -15,7 +15,7 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "engine": "InnoDB",
- "description": "Tracks a customer's treatment package with a before/after photo gallery (multi-angle compare) \u2014 closes the gap vs Clinicea.",
+ "description": "Tracks a customer's treatment package with before/after photo gallery, exercise details, and multi-angle compare.",
  "icon": "fa fa-camera",
  "fields": [
   {
@@ -46,6 +46,18 @@
    "fieldname": "treatment_end_date",
    "label": "Treatment End Date",
    "fieldtype": "Date"
+  },
+  {
+   "fieldname": "section_break_tr_exercises",
+   "fieldtype": "Section Break",
+   "label": "Exercise Details"
+  },
+  {
+   "fieldname": "exercise_details",
+   "label": "Exercise Details",
+   "fieldtype": "Table",
+   "options": "Treatment Record Exercise",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_tr_notes",

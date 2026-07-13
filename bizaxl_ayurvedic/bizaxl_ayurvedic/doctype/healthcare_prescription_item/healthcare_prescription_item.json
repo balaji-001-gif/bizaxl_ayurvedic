@@ -34,8 +34,7 @@
   {
    "fieldname": "frequency",
    "label": "Frequency",
-   "fieldtype": "Select",
-   "options": "\nOD\nBD\nTID\nQID\n1-0-1\n1-1-1",
+   "fieldtype": "Data",
    "in_list_view": 1
   },
   {

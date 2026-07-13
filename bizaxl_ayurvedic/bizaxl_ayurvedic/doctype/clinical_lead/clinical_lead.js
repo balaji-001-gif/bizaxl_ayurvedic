@@ -28,6 +28,13 @@ frappe.ui.form.on("Clinical Lead", {
 										frm.reload_doc();
 									}
 								},
+								error(r) {
+									frappe.msgprint({
+										title: __("Error"),
+										message: r.message || __("Failed to create patient. Please try again."),
+										indicator: "red",
+									});
+								},
 							});
 						}
 					);

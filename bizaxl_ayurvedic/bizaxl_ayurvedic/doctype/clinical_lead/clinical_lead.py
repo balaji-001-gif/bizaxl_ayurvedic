@@ -74,7 +74,10 @@ def create_patient_from_lead(lead_name):
     if lead.email:
         patient.email = lead.email
     if lead.age:
-        patient.age = str(lead.age)
+        # Convert age to approximate date_of_birth (Patient's age is read-only computed)
+        from datetime import date
+        from dateutil.relativedelta import relativedelta
+        patient.dob = (date.today() - relativedelta(years=lead.age)).isoformat()
     patient.flags.ignore_permissions = True
     patient.flags.ignore_mandatory = True  # skip fields not available from lead
     patient.insert()

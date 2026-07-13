@@ -1,22 +1,30 @@
 # Copyright (c) 2026, Bizaxl Ayurvedic and contributors
 # For license information, please see license.txt
 """
-Adds an **Exercise Steps** custom field to the **Therapy Session Exercise** child
-table doctype (from Frappe Healthcare). When an Exercise Type is selected in a
-Therapy Session, the exercise_steps HTML is auto-fetched from the Exercise Type
-and stored in this field so it displays directly inside the grid row.
+Adds an **Exercise Steps** custom field to the **Exercise** child table doctype
+(from Frappe Healthcare — the exercises table inside Therapy Session).
+
+When an Exercise Type is selected in a Therapy Session, the exercise_steps HTML
+is auto-fetched from the Exercise Type and stored in this field so it displays
+directly inside the grid row.
 """
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
 def execute():
-    # Check if already exists
-    if frappe.get_meta("Therapy Session Exercise").has_field("exercise_steps"):
+    CHILD_DOCTYPE = "Exercise"
+
+    # Guard: the Healthcare child table might not be installed yet
+    if not frappe.db.exists("DocType", CHILD_DOCTYPE):
+        return
+
+    # Check if field already exists
+    if frappe.get_meta(CHILD_DOCTYPE).has_field("exercise_steps"):
         return
 
     create_custom_fields({
-        "Therapy Session Exercise": [
+        CHILD_DOCTYPE: [
             {
                 "fieldname": "exercise_steps",
                 "label": "Exercise Steps",

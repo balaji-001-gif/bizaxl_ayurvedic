@@ -7,11 +7,12 @@ from frappe.model.document import Document
 
 class TreatmentFollowUp(Document):
     def validate(self):
-        """Auto-create the next pending visit row when an existing row's status
-        changes to 'Completed'. Only triggers for rows that existed *before*
-        this save (i.e. were already persisted) — newly appended rows from
-        create_or_extend_from_encounter are excluded because that function
-        already creates the next pending row."""
+        """When follow_up_after_days changes, regenerate all pending follow-up
+        visits based on the new interval. Otherwise, auto-create the next pending
+        visit row when an existing row's status changes to 'Completed'.
+
+        Works both on initial save (draft) and update-after-submit.
+        """
         if self.is_new() or not self.follow_up_visits:
             return
 
@@ -19,6 +20,12 @@ class TreatmentFollowUp(Document):
         if not previous:
             return
 
+        # If follow_up_after_days changed, regenerate ALL pending visits
+        if previous.follow_up_after_days != self.follow_up_after_days:
+            self._regenerate_pending_visits()
+            return
+
+        # Existing logic: auto-create next pending visit on status change to Completed
         prev_statuses = {r.name: r.status for r in (previous.follow_up_visits or [])}
         interval = self.follow_up_after_days or 30
         add_days = frappe.utils.add_days
@@ -44,6 +51,56 @@ class TreatmentFollowUp(Document):
                         "next_follow_up_date": add_days(getdate(next_date), interval),
                         "status": "Pending",
                     })
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _regenerate_pending_visits(self):
+        """Regenerate all pending follow-up visits based on the current
+        follow_up_after_days and total_treatment_duration_days.
+        Completed and Missed visits are preserved as history."""
+        add_days = frappe.utils.add_days
+        getdate = frappe.utils.getdate
+
+        interval = self.follow_up_after_days or 30
+        total_duration = self.total_treatment_duration_days or 90
+
+        # Keep completed/missed visits, remove all pending
+        preserved = [v for v in self.follow_up_visits if v.status in ("Completed", "Missed")]
+        self.set("follow_up_visits", preserved)
+
+        # Find the starting point: last completed visit date or start_date
+        last_date = getdate(self.start_date) if self.start_date else getdate()
+        for v in preserved:
+            if v.visit_date and getdate(v.visit_date) > last_date:
+                last_date = getdate(v.visit_date)
+
+        # Generate pending visits at intervals up to total_treatment_duration_days
+        num_visits = max(1, total_duration // interval)
+        for i in range(1, num_visits + 1):
+            visit_date = add_days(last_date, interval * i)
+            next_date = add_days(getdate(visit_date), interval)
+            self.append("follow_up_visits", {
+                "visit_date": visit_date,
+                "next_follow_up_date": next_date,
+                "status": "Pending",
+                "follow_up_days": str(interval),
+                "follow_up_type": self._map_interval_to_type(interval),
+            })
+
+    def _map_interval_to_type(self, days):
+        """Map the interval in days to a Follow Up Type label."""
+        if days <= 7:
+            return "Weekly"
+        elif days <= 30:
+            return "Monthly"
+        elif days <= 90:
+            return "Quarterly"
+        elif days <= 180:
+            return "Half Yearly"
+        else:
+            return "Yearly"
 
 
 def create_or_extend_from_encounter(doc, method=None):

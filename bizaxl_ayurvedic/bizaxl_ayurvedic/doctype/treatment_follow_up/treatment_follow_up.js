@@ -1,6 +1,28 @@
 frappe.ui.form.on("Treatment Follow-Up", {
 	refresh(frm) {
-		// placeholder for future dashboard buttons
+		if (frm.doc.docstatus === 1) {
+			// Show Update button on submitted docs — like Token Counter pattern
+			frm.page.set_primary_action(__("Update & Recalculate"), () => {
+				frm.save("Update");
+			});
+		}
+	},
+	follow_up_after_days(frm) {
+		if (frm.doc.docstatus === 1 && frm.doc.follow_up_after_days) {
+			frm.dashboard.clear_headline();
+			frm.dashboard.set_headline(
+				__("Follow-up visits will be recalculated on save based on the new interval.")
+			);
+		}
+	},
+	after_save(frm) {
+		if (frm.doc.docstatus === 1) {
+			frm.dashboard.clear_headline();
+			frm.dashboard.set_headline(
+				__("Follow-up visits recalculated. Review and submit when ready.")
+			);
+			frm.refresh_field("follow_up_visits");
+		}
 	},
 });
 

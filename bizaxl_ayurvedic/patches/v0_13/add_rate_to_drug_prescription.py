@@ -22,15 +22,17 @@ def execute():
     if frappe.get_meta(CHILD).has_field("rate"):
         return
 
-    create_custom_fields({
-        CHILD: [
-            {
-                "fieldname": "rate",
-                "label": "Rate",
-                "fieldtype": "Currency",
-                "insert_after": "qty",
-                "in_list_view": 1,
-                "description": "Unit rate auto-fetched from Item master. Override manually if needed.",
-            },
-        ],
-    })
+    meta = frappe.get_meta(CHILD)
+    field_def = {
+        "fieldname": "rate",
+        "label": "Rate",
+        "fieldtype": "Currency",
+        "in_list_view": 1,
+        "description": "Unit rate auto-fetched from Item master. Override manually if needed.",
+    }
+
+    # Place after qty if it exists; otherwise let Frappe decide default placement
+    if meta.has_field("qty"):
+        field_def["insert_after"] = "qty"
+
+    create_custom_fields({CHILD: [field_def]})

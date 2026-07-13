@@ -12,7 +12,7 @@ competitor in the category currently offers.
 
 | Area | Included |
 |---|---|
-| **Custom DocTypes** | 15 DocTypes (9 parent + 6 child tables) — see table below |
+| **Custom DocTypes** | 20 DocTypes (12 parent + 8 child tables) — see table below |
 | **Custom Scripts & Automation** | Client scripts (`.js`) + server-side controller hooks (`.py`), ported from the client's original ad-hoc Client/Server Script records into version-controlled app code |
 | **AI Integration** | Lead scoring, follow-up reminders, seasonal demand forecasting, WhatsApp prescription bot, AI chatbot, store benchmarking, brand loyalty tie-up, booking micro-site |
 | **Reports** | Hot Leads (AI Score), Seasonal Reorder Forecast |
@@ -29,8 +29,9 @@ competitor in the category currently offers.
 | DocType | Type | Purpose |
 |---|---|---|
 | `Clinical Lead` | Submittable | Lead capture with Dosha-ready fields, AI lead score, one-click "Create Patient" |
-| `Treatment Record` | Submittable | Customer treatment package + before/after photo gallery |
+| `Treatment Record` | Submittable | Customer treatment package + before/after photo gallery + exercise details from Therapy Session |
 | `Treatment Photo` | Child table | Before/after image with angle & annotation (of `Treatment Record`) |
+| `Treatment Record Exercise` | Child table | Read-only snapshot of exercises from the linked Therapy Session (of `Treatment Record`) |
 | `Healthcare Medication Prescription` | Submittable | Printable/WhatsApp-shareable prescription, auto-filled from `Patient Encounter` |
 | `Healthcare Prescription Item` | Child table | Medication line item (of the prescription above) |
 | `Token Counter` | Submittable | Daily OPD token queue per practitioner, auto-created from `Patient Appointment` |
@@ -43,12 +44,18 @@ competitor in the category currently offers.
 | `Lab Test Parameter Detail` | Child table | Individual parameter range row (of the reference above) |
 | `Treatment Follow-Up` | Submittable | Rolling care plan per patient; auto-extended after every consultation |
 | `Follow-up Visits` | Child table | Scheduled visit row (of `Treatment Follow-Up`) |
+| `Ayurvedic Herb Reference` | Standard | Clinical Decision Support — herb reference with Dosha effect, classical formulations, and symptom mappings |
+| `Herb Symptom Map` | Child table | Herb-to-symptom mapping row (of `Ayurvedic Herb Reference`) |
+| `Patient Feedback` | Standard | Post-billing feedback/ratings with sentiment analysis and Google Review link trigger |
 | `Bizaxl Ayurvedic Settings` | Single | WhatsApp / OCR / LLM / loyalty configuration |
 
 All field definitions were carried over field-for-field from the client's
 `DocType.xlsx` export (options, mandatory flags, fetch-from, select values,
 etc.) — nothing was invented; a few sensible defaults (e.g. status default
-values) were added where the source left them blank.
+values) were added where the source left them blank. The original 15 came
+from `DocType.xlsx`; the 4 additional doctypes (`Ayurvedic Herb Reference`,
+`Herb Symptom Map`, `Patient Feedback`, and `Treatment Record Exercise`)
+were added during development to close additional feature gaps.
 
 ---
 
@@ -110,7 +117,7 @@ Prophet, Google Vision OCR, or an LLM endpoint — configured centrally in
 ```bash
 # 1. Get the app onto your bench
 cd ~/frappe-bench
-bench get-app bizaxl_ayurvedic /path/to/bizaxl_ayurvedic   # or a git remote URL
+bench get-app bizaxl_ayurvedic https://github.com/balaji-001-gif/bizaxl_ayurvedic.git
 
 # 2. Install prerequisites (ERPNext + Healthcare)
 bench --site your-site.local install-app erpnext
@@ -174,7 +181,7 @@ bizaxl_ayurvedic/
     │   ├── js/                      # app bundle + core-DocType extensions
     │   └── css/
     └── bizaxl_ayurvedic/                # the "Bizaxl Ayurvedic" Frappe module
-        ├── doctype/                  # 15 DocTypes (JSON + .py + .js)
+        ├── doctype/                  # 20 DocTypes (JSON + .py + .js)
         ├── report/                   # Hot Leads (AI Score), Seasonal Reorder Forecast
         ├── workspace/ayurvedic_store/
         ├── notification/
@@ -207,7 +214,7 @@ bizaxl_ayurvedic/
 
 - `ayurvedic_gap_analysis.pdf` — bizaxl's competitor gap analysis (Section 1)
   and white-space AI opportunities (Section 2)
-- `DocType.xlsx` — full field-level export of the 15 target DocTypes
+- `DocType.xlsx` — full field-level export of the 15 original target DocTypes (4 more — `Ayurvedic Herb Reference`, `Herb Symptom Map`, `Patient Feedback`, `Treatment Record Exercise` — were added during development)
 - `Client_Script.xlsx` — 12 ad-hoc Client Scripts, ported to versioned `.js`
 - `Server_Script-2.xlsx` — 2 ad-hoc Server Scripts, ported to versioned `.py`
   DocType Event hooks

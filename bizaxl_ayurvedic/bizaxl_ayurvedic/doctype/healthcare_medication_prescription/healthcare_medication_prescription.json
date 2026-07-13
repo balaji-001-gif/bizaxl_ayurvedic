@@ -44,6 +44,14 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
    "fieldname": "prescription_date",
    "label": "Prescription Date",
    "fieldtype": "Date",

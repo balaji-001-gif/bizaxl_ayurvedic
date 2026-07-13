@@ -14,6 +14,12 @@ class HealthcareMedicationPrescription(Document):
         Only populates if the user has not already entered medications manually
         on the form — prevents silent data loss.
         """
+        if self.encounter and not self.company:
+            self.company = frappe.db.get_value("Patient Encounter", self.encounter, "company")
+
+        if not self.company:
+            self.company = frappe.db.get_single_value("Global Defaults", "default_company")
+
         if not self.encounter or self.medications:
             return
 

@@ -91,7 +91,18 @@ website_route_rules = [
 # ------------------------------------------------------------------
 # Standard boilerplate placeholders (kept for easy extension)
 # ------------------------------------------------------------------
-# has_permission = {}
+has_permission = {
+    "Meal Preparation Log": "bizaxl_ayurvedic.hooks.meal_preparation_log_has_permission",
+}
+
+
+def meal_preparation_log_has_permission(doc=None, ptype=None, user=None):
+    """Hide Meal Preparation Log unless the setting is enabled."""
+    if not frappe.db.get_single_value("Bizaxl Ayurvedic Settings", "enable_meal_preparation_log"):
+        return False
+    return True
+
+
 # permission_query_conditions = {}
 # override_doctype_class = {}
 # on_session_creation = []

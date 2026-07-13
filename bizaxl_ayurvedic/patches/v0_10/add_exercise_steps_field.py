@@ -13,13 +13,9 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
 def execute():
-    # Check if exercise_steps already exists (either as standard or custom field)
-    existing = frappe.db.exists(
-        "Custom Field",
-        {"dt": "Exercise Type", "fieldname": "exercise_steps"},
-    )
-    if existing:
-        return  # Field already present — nothing to do
+    # Check if exercise_steps already exists (standard or custom field)
+    if frappe.get_meta("Exercise Type").has_field("exercise_steps"):
+        return  # Already present — nothing to do
 
     create_custom_fields({
         "Exercise Type": [

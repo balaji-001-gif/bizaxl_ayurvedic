@@ -1,0 +1,92 @@
+/* Follow-Up Calendar — Pending Visits Overview */
+.fu-calendar-body { padding: 20px; }
+.fu-calendar-body .fu-stats-card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.15s;
+}
+.fu-calendar-body .fu-stats-card:hover { transform: translateY(-2px); }
+.fu-calendar-body .fu-stats-card .panel-body { padding: 20px; }
+.fu-calendar-body .fu-stats-card h3 { margin: 0 0 4px 0; font-weight: 700; font-size: 32px; }
+.fu-calendar-body .fu-stats-card small { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.fu-calendar-body .fu-visit-card {
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  margin-bottom: 12px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.fu-calendar-body .fu-visit-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: #cce5ff;
+}
+.fu-calendar-body .fu-visit-card .card-body { padding: 16px; }
+.fu-calendar-body .fu-visit-card .visit-date {
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+.fu-calendar-body .fu-visit-card .visit-date strong {
+  color: #003960;
+  font-size: 15px;
+}
+.fu-calendar-body .fu-visit-card .patient-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.fu-calendar-body .fu-visit-card .visit-meta {
+  font-size: 12px;
+  color: #6c757d;
+}
+.fu-calendar-body .fu-visit-card .visit-meta span {
+  margin-right: 16px;
+}
+.fu-calendar-body .fu-visit-card .visit-meta i {
+  margin-right: 4px;
+  width: 14px;
+}
+
+.fu-calendar-body .fu-overdue {
+  border-left: 4px solid #dc3545;
+}
+.fu-calendar-body .fu-today {
+  border-left: 4px solid #ffc107;
+  background-color: #fffef5;
+}
+.fu-calendar-body .fu-upcoming {
+  border-left: 4px solid #28a745;
+}
+
+.fu-calendar-body .fu-date-header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #003960;
+  margin: 24px 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
+}
+.fu-calendar-body .fu-date-header small {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6c757d;
+  margin-left: 8px;
+}
+
+.fu-calendar-body .fu-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+.fu-calendar-body .fu-empty i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d4edda;
+}
+.fu-calendar-body .fu-empty h4 {
+  margin-bottom: 8px;
+  color: #495057;
+}

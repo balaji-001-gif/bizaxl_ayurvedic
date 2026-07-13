@@ -103,6 +103,84 @@ class TreatmentFollowUp(Document):
             return "Yearly"
 
 
+@frappe.whitelist()
+def get_pending_visits(from_date=None, to_date=None):
+    """Return all pending follow-up visits grouped for the calendar view.
+    Used by the Follow-Up Calendar page (/app/follow-up-calendar).
+
+    Returns:
+        dict with:
+        - total_patients: unique patient count
+        - total_pending: total pending visits in range
+        - overdue: count of visits before today
+        - this_week: count of visits within next 7 days
+        - visits: list of dicts with visit details + parent info
+    """
+    from frappe.utils import getdate, today as _today, add_days
+
+    filters = {"status": "Pending"}
+    if from_date:
+        filters["visit_date"] = [">=", from_date]
+    if to_date and not from_date:
+        # If only to_date is set, filter range up to to_date
+        filters["visit_date"] = ["<=", to_date]
+    elif from_date and to_date:
+        filters["visit_date"] = ["between", [from_date, to_date]]
+
+    visits = frappe.get_all(
+        "Follow-up Visits",
+        filters=filters,
+        fields=[
+            "name", "parent", "parenttype", "visit_date",
+            "follow_up_type", "follow_up_days", "status",
+        ],
+        order_by="visit_date asc, parent asc",
+    )
+
+    today = getdate(_today())
+    week_end = add_days(today, 7)
+    overdue_count = 0
+    this_week_count = 0
+    patient_set = set()
+
+    result_visits = []
+    for v in visits:
+        patient_set.add(v.parent)
+        vdate = getdate(v.visit_date) if v.visit_date else None
+        if vdate and vdate < today:
+            overdue_count += 1
+        if vdate and today <= vdate <= week_end:
+            this_week_count += 1
+
+        # Fetch patient name from parent Treatment Follow-Up
+        patient_name = frappe.db.get_value(
+            "Treatment Follow-Up", v.parent, "patient"
+        )
+        if patient_name:
+            patient_doc_name = frappe.db.get_value("Patient", patient_name, "patient_name")
+            if patient_doc_name:
+                patient_name = patient_doc_name
+
+        result_visits.append({
+            "name": v.name,
+            "parent": v.parent,
+            "parenttype": v.parenttype,
+            "visit_date": str(v.visit_date) if v.visit_date else None,
+            "follow_up_type": v.follow_up_type,
+            "follow_up_days": v.follow_up_days,
+            "status": v.status,
+            "patient_name": patient_name or v.parent,
+        })
+
+    return {
+        "total_patients": len(patient_set),
+        "total_pending": len(result_visits),
+        "overdue": overdue_count,
+        "this_week": this_week_count,
+        "visits": result_visits,
+    }
+
+
 def create_or_extend_from_encounter(doc, method=None):
     """DocType Event handler: Patient Encounter -> on_submit.
     Registered in hooks.py as:

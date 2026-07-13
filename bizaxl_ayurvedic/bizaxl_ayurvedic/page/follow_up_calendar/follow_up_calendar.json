@@ -1,0 +1,11 @@
+{
+ "doctype": "Page",
+ "name": "Follow-Up Calendar",
+ "icon": "fa fa-calendar-check-o",
+ "route": "follow-up-calendar",
+ "roles": [
+ {"role": "System Manager"},
+ {"role": "Healthcare Practitioner"}
+ ],
+ "module": "Bizaxl Ayurvedic"
+}

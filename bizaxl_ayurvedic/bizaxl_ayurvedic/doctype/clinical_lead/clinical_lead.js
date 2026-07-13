@@ -3,17 +3,25 @@
 
 frappe.ui.form.on("Clinical Lead", {
 	refresh(frm) {
-		// Convert lead to Patient in one click
-		if (!frm.doc.patient && !frm.is_new()) {
-			frm.add_custom_button(__("Create Patient"), () => {
-				frappe.new_doc("Patient", {
-					patient_name: frm.doc.lead_name,
-					mobile: frm.doc.mobile_number,
-					sex: frm.doc.gender,
-				}).then(() => {
-					frappe.msgprint(__("Complete the Patient record, then link it back on this Lead."));
+		// ── Patient navigation & creation ──
+		if (!frm.is_new()) {
+			if (frm.doc.patient) {
+				// Patient already linked — show View button to open it
+				frm.add_custom_button(__("View Patient"), () => {
+					frappe.set_route("Form", "Patient", frm.doc.patient);
 				});
-			});
+			} else {
+				// No patient yet — show Create button
+				frm.add_custom_button(__("Create Patient"), () => {
+					frappe.new_doc("Patient", {
+						patient_name: frm.doc.lead_name,
+						mobile: frm.doc.mobile_number,
+						sex: frm.doc.gender,
+					}).then(() => {
+						frappe.msgprint(__("Complete the Patient record, then link it back on this Lead."));
+					});
+				});
+			}
 		}
 
 		// AI: show lead score / next-best-action badge if available

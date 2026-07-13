@@ -19,10 +19,10 @@ def execute():
     if not frappe.db.exists("DocType", CHILD):
         return
 
-    if frappe.get_meta(CHILD).has_field("rate"):
+    meta = frappe.get_meta(CHILD)
+    if meta.has_field("rate"):
         return
 
-    meta = frappe.get_meta(CHILD)
     field_def = {
         "fieldname": "rate",
         "label": "Rate",

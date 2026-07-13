@@ -46,7 +46,7 @@
   {
    "fieldname": "prescription_date",
    "label": "Prescription Date",
-   "fieldtype": "Datetime",
+   "fieldtype": "Date",
    "default": "Today"
   },
   {

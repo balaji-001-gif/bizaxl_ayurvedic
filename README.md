@@ -39,7 +39,7 @@ competitor in the category currently offers.
 | `Diet Template Item` | Child table | Meal-time/food-item row (of `Diet Template`) |
 | `Diet Plan` | Submittable, tabbed | Patient-specific diet plan; fetches a `Diet Template` and can bulk-generate kitchen logs |
 | `Diet Plan Meal Schedule` | Child table | Per-meal schedule row (of `Diet Plan`) |
-| `Meal Preparation Log` | Standard | Kitchen worklist: prepared / sent / served tracking |
+
 | `Lab Test Parameter Reference` | Standard | Normal-range reference sheet per Lab Test Template |
 | `Lab Test Parameter Detail` | Child table | Individual parameter range row (of the reference above) |
 | `Treatment Follow-Up` | Submittable | Rolling care plan per patient; auto-extended after every consultation |

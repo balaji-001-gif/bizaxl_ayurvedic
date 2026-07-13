@@ -87,18 +87,6 @@
    "description": "Your Google Business Profile review link — shared with satisfied customers after feedback"
   },
   {
-   "fieldname": "sb_meal_log",
-   "fieldtype": "Section Break",
-   "label": "Meal Preparation Log"
-  },
-  {
-   "fieldname": "enable_meal_preparation_log",
-   "label": "Enable Meal Preparation Log",
-   "fieldtype": "Check",
-   "default": 0,
-   "description": "When enabled, the Meal Preparation Log doctype appears in the workspace and can be accessed. When disabled, it is hidden from all users."
-  },
-  {
    "fieldname": "sb_loyalty",
    "fieldtype": "Section Break",
    "label": "Brand Loyalty Tie-Up"

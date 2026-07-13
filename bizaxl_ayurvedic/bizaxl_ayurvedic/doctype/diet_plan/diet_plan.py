@@ -37,35 +37,4 @@ def get_template_rows(template, start_date=None):
     return rows
 
 
-@frappe.whitelist()
-def create_meal_logs(docname):
-    """Creates a Meal Preparation Log for every meal-schedule row that doesn't
-    already have one. Skips duplicates. Ported from the client's original
-    'To create a Meal log in diet plan' Client Script."""
-    plan = frappe.get_doc("Diet Plan", docname)
-    created, skipped = 0, 0
 
-    for row in plan.table_mcva:
-        exists = frappe.db.exists("Meal Preparation Log", {
-            "diet_plan": plan.name,
-            "patient": plan.patient,
-            "meal_time": row.meal_type,
-            "food_items": row.menu_item,
-        })
-        if exists:
-            skipped += 1
-            continue
-
-        frappe.get_doc({
-            "doctype": "Meal Preparation Log",
-            "date": frappe.utils.today(),
-            "diet_plan": plan.name,
-            "patient": plan.patient,
-            "wardbed": plan.wardbed,
-            "meal_time": row.meal_type,
-            "food_items": row.menu_item,
-            "status": "Draft",
-        }).insert(ignore_permissions=True)
-        created += 1
-
-    return f"Created: {created}, Skipped (already exists): {skipped}"

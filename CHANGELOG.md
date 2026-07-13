@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Diet Template Item** (child) — Meal-time / food-item row
 - **Diet Plan** — Patient-specific diet plan with tabbed UI; fetches a Diet Template and can bulk-generate kitchen logs
 - **Diet Plan Meal Schedule** (child) — Per-meal schedule row
-- **Meal Preparation Log** — Kitchen worklist: prepared / sent / served tracking
 - **Lab Test Parameter Reference** — Normal-range reference sheet per Lab Test Template
 - **Lab Test Parameter Detail** (child) — Individual parameter range row
 - **Treatment Follow-Up** — Rolling care plan per patient; auto-extended after every consultation

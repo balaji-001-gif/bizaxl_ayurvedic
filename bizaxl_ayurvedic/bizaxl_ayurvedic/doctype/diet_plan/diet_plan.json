@@ -15,7 +15,7 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "engine": "InnoDB",
- "description": "Ayurvedic diet plan with Dosha focus, fetched from Diet Templates, and used to auto-generate kitchen Meal Preparation Logs.",
+ "description": "Ayurvedic diet plan with Dosha focus, fetched from Diet Templates.",
  "icon": "fa fa-leaf",
  "fields": [
   {

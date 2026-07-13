@@ -47,6 +47,9 @@ doc_events = {
     "Treatment Plan Template": {
         "validate": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.clinical_lead.clinical_lead.populate_drug_rates_from_master",
     },
+    "Patient Appointment": {
+        "before_insert": "bizaxl_ayurvedic.bizaxl_ayurvedic.doctype.token_counter.token_counter.assign_token_number",
+    },
 }
 
 # ------------------------------------------------------------------

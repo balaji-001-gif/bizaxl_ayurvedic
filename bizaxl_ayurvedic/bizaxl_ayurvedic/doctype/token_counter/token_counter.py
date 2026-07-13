@@ -20,6 +20,23 @@ class TokenCounter(Document):
 # Whitelisted helpers — Token Dashboard API and legacy queue helpers
 # ------------------------------------------------------------------
 
+def assign_token_number(doc, method=None):
+    """DocType Event: Patient Appointment -> before_insert.
+
+    Auto-assigns a daily-resetting token number (starts at 1 each day)
+    by querying the highest existing token_number for the appointment date.
+    Reliable server-side approach — no async issues."""
+    if doc.token_number:
+        return
+    last_token = frappe.db.get_value(
+        "Patient Appointment",
+        filters={"appointment_date": doc.appointment_date},
+        fieldname="token_number",
+        order_by="token_number desc",
+    )
+    doc.token_number = (last_token or 0) + 1
+
+
 @frappe.whitelist()
 def create_next_token(appointment, date, practitioner):
     """Creates and submits the next sequential Token Counter for a
